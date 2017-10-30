@@ -1,0 +1,46 @@
+@import "../../styles/constants.scss";
+
+header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  // Bootstrap removes all margin, but I'd like a small one
+  @media(max-width: 768px) {
+    margin: 0 10px;
+  }
+
+  >.header-inner {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 0;
+    width: 100%;
+    flex-grow: 1;
+
+    @media(max-width: $nav-collapse-width) {
+      flex-direction: column;
+      padding: 10px 0;
+    }
+
+  }
+}
+
+header:after {
+  content:'';
+  width: 100%;
+  height: 1px;
+  background: $ip-l-gray;
+  position: relative;
+  margin: 0 auto;
+}
+
+.logo {
+  font-family: "FatFrank", sans-serif;
+  color: $ip-blue;
+  font-size: 30px;
+  text-decoration: none;
+  text-align: center;
+}

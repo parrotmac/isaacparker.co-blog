@@ -1,0 +1,14 @@
+@import "../../styles/constants.scss";
+
+.BlogPost {
+
+  >h3.BlogPost-Title {
+    color: $ip-dk-gray;
+    font-family: $ip-body-font-family;
+  }
+  >p.BlogPost-Author {
+    color: $ip-dk-gray;
+    font-family: $ip-body-font-family;
+  }
+
+}
