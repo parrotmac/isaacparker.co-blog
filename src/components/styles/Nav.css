@@ -10,7 +10,7 @@ nav {
       max-width: 100%; } }
   nav > a {
     flex-grow: 0;
-    margin-left: 30px; }
+    margin-left: 40px; }
     nav > a:first-child {
       margin-left: 0; }
     nav > a:link, nav > a:visited {
@@ -18,24 +18,27 @@ nav {
       color: #606060;
       font-family: Futura, sans-serif;
       font-weight: normal;
-      text-decoration: none; }
+      text-decoration: none;
+      font-size: 18px;
+      border-color: #FFFFFF;
+      transition: border-color 0.25s ease-in-out; }
       @media (max-width: 640px) {
         nav > a:link, nav > a:visited {
           margin: 4px 0; } }
-      nav > a:link.active, nav > a:visited.active {
-        margin-top: 0;
-        border-bottom: 2px solid #3098DD; }
+      nav > a:link.active, nav > a:link.active:hover, nav > a:visited.active, nav > a:visited.active:hover {
+        margin-top: 2px;
+        border-bottom: 4px solid #3098DD; }
         @media (max-width: 640px) {
-          nav > a:link.active, nav > a:visited.active {
+          nav > a:link.active, nav > a:link.active:hover, nav > a:visited.active, nav > a:visited.active:hover {
             margin-top: 4px;
-            margin-bottom: 2px; } }
+            margin-bottom: 0; } }
       nav > a:link:hover, nav > a:visited:hover {
-        margin-top: 0;
-        border-bottom: 2px solid #95989A; }
+        margin-top: 2px;
+        border-bottom: 4px solid #95989A; }
         @media (max-width: 640px) {
           nav > a:link:hover, nav > a:visited:hover {
             margin-top: 4px;
-            margin-bottom: 2px; } }
+            margin-bottom: 0; } }
   nav > .search-icon {
     cursor: pointer;
     margin-top: 6px;

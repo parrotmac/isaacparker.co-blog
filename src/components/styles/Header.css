@@ -27,7 +27,7 @@ header:after {
   position: relative;
   margin: 0 auto; }
 
-.logo {
+.logo, .logo:hover, .logo:link, .logo:visited {
   font-family: "FatFrank", sans-serif;
   color: #3098DD;
   font-size: 30px;

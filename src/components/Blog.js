@@ -1,35 +1,48 @@
 import React, {Component} from 'react'
 import BlogPost from "./BlogPost";
+import {inject, observer} from "mobx-react";
+import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
+import HorizontalRule from "./HorizontalRule";
 
+
+@inject("BlogPost") @observer
 class Blog extends Component {
-    state = {
-        posts: []
-    };
 
     componentDidMount() {
-        fetch(
-            '/api/posts'
-        ).then(
-            res => res.json()
-        ).then(
-            res => {
-                this.setState({
-                    posts: res
-                })
-            }
-        );
+        this.props.BlogPost.fetchBlogPosts();
     }
 
     render() {
-        if(this.state.posts.length === 0) {
-            return (<small>Posts will appear here</small>)
+        const {blogPosts, fetchState} = this.props.BlogPost;
+
+        if(fetchState === BLOG_POST_REQUEST_STATES.REQUESTING || fetchState === BLOG_POST_REQUEST_STATES.INITIAL) {
+            return (<small>Loading...</small>)
         }
+
+        if(fetchState === BLOG_POST_REQUEST_STATES.FAILURE) {
+            return (<small>:( Unable to get blog posts.</small>)
+        }
+
+
+        if(BLOG_POST_REQUEST_STATES.SUCCESS && blogPosts.length === 0) {
+            return (<small>There aren't any blog posts yet.</small>)
+        }
+
         return (
-            <div>
-                {this.state.posts.map(post =>
-                    <BlogPost blogPost={post}/>
-                )}
-            </div>
+            blogPosts.map((post, index) =>
+                <div>
+
+                    <BlogPost key={index} blogPost={post}/>
+
+                    {/* Use a hr with a smaller margin at the end of the last post */}
+                    {index === blogPosts.length - 1 ?
+                        <HorizontalRule key={`hr-${index}`} width={'80%'} hMargin={'auto'} vMargin={20}/>
+                        :
+                        <HorizontalRule key={`hr-${index}`} width={'80%'} hMargin={'auto'} vMargin={50}/>
+                    }
+
+                </div>
+            )
         )
     }
 }

@@ -26,13 +26,10 @@ class EditorPane extends Component {
 
     render() {
         return (
-            <div>
-                <h3>Start a new post</h3>
-                <RichTextEditor
-                    value={this.state.value}
-                    onChange={this.onChange.bind(this)}
-                />
-            </div>
+            <RichTextEditor
+                value={this.state.value}
+                onChange={this.onChange.bind(this)}
+            />
         )
     }
 }

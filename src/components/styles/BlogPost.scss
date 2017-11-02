@@ -3,12 +3,20 @@
 .BlogPost {
 
   >h3.BlogPost-Title {
+    padding: 0;
+    margin: 0 0 5px 0;
     color: $ip-dk-gray;
     font-family: $ip-body-font-family;
   }
   >p.BlogPost-Author {
-    color: $ip-dk-gray;
+    margin: 5px 0;
+    padding: 0;
+    color: $ip-l-gray;
     font-family: $ip-body-font-family;
+  }
+
+  >div.BlogPost-Body {
+    margin: 5px 0 0 0;
   }
 
 }

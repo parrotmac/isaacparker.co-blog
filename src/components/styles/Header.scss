@@ -37,7 +37,7 @@ header:after {
   margin: 0 auto;
 }
 
-.logo {
+.logo, .logo:hover, .logo:link, .logo:visited {
   font-family: "FatFrank", sans-serif;
   color: $ip-blue;
   font-size: 30px;

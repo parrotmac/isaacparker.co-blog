@@ -1,17 +1,18 @@
 import React, {Component} from 'react'
 import './styles/Nav.css'
+import {NavLink} from "react-router-dom";
 
 class Nav extends Component {
     render() {
         return (
             <nav>
-                <a href="/blog">Blog</a>
-                <a href="/portfolio">Portfolio</a>
-                <a href="/social">Social</a>
-                <a href="/contact">Contact</a>
-                <a href="#search">
-                    <i className="search-icon material-icons">search</i>
-                </a>
+                <NavLink activeClassName={'active'} to="/blog">Blog</NavLink>
+                <NavLink activeClassName={'active'} to="/portfolio">Portfolio</NavLink>
+                <NavLink activeClassName={'active'} to="/social">Social</NavLink>
+                <NavLink activeClassName={'active'} to="/contact">Contact</NavLink>
+                {/*<NavLink activeClassName={'active'} to="#search">*/}
+                    {/*<i className="search-icon material-icons">search</i>*/}
+                {/*</NavLink>*/}
             </nav>
         )
     }

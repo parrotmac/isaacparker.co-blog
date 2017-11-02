@@ -14,7 +14,7 @@ nav {
 
   >a {
     flex-grow: 0;
-    margin-left: 30px;
+    margin-left: 40px;
 
     &:first-child {
       margin-left: 0;
@@ -27,28 +27,32 @@ nav {
       font-family: Futura, sans-serif;
       font-weight: normal;
       text-decoration: none;
+      font-size: 18px;
+      border-color: #FFFFFF;
+
+      transition: border-color 0.25s ease-in-out ;
 
       @media(max-width: $nav-collapse-width) {
         margin: 4px 0;
       }
 
-      &.active {
-        margin-top: 0;
-        border-bottom: 2px solid $ip-blue;
+      &.active, &.active:hover {
+        margin-top: 2px;
+        border-bottom: 4px solid $ip-blue;
 
         @media(max-width: $nav-collapse-width) {
           margin-top: 4px;
-          margin-bottom: 2px;
+          margin-bottom: 0;
         }
 
       }
       &:hover {
-        margin-top: 0;
-        border-bottom: 2px solid $ip-l-gray;
+        margin-top: 2px;
+        border-bottom: 4px solid $ip-l-gray;
 
         @media(max-width: $nav-collapse-width) {
           margin-top: 4px;
-          margin-bottom: 2px;
+          margin-bottom: 0;
         }
 
       }
