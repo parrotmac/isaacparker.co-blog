@@ -42,10 +42,14 @@ func (a *App) Run(addr string) {
 
 
 func (a *App) initializeFrontendRoutes() {
+
+	a.Router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("client/build/static/"))))
+
 	indexHandler := func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "dist/index.html")
+		http.ServeFile(w, r, "client/build/")
 	}
 	a.Router.PathPrefix("/").HandlerFunc(indexHandler)
+
 }
 
 func (a *App) initializeApiRoutes() {

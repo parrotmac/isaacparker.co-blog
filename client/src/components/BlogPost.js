@@ -16,7 +16,7 @@ class BlogPost extends Component {
         const now = new Date();
         const locale = "en-us";
         const englishMonth = createdDT.toLocaleString(locale, {month: "short"});
-        const yearAddition = createdDT.getFullYear() === now.getFullYear()?"":`, ${createdDT.getFullYear()}`;
+        const yearAddition = createdDT.getFullYear() === now.getFullYear() ? "" : `, ${createdDT.getFullYear()}`;
         const prettyCreatedAtString = `${englishMonth} ${createdDT.getDate()}${yearAddition} at ${createdDT.getHours()}:${createdDT.getMinutes()}`;
         return (
             <div className={'BlogPost'} key={ID}>

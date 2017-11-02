@@ -6,9 +6,9 @@ class PortfolioProject {
         {
             slug: "health-services-platform-consortium",
             title: "HSPConsortium Website",
-            coverImageURL: "https://placehold.it/300x100?text=HSPC",
+            coverImageURL: "https://hspc.stag9.com/static/imgs/logo-draft-v5.png",
             clientName: "Health Services Platform Consortium",
-            writeupBody: "This one is actually deployed. Neat!"
+            writeupBody: "I'm working with HSPC (Health Services Platform Consortium) to revamp their homepage."
         },
         // {
         //     slug: "matthew-turley-stock",

@@ -10,12 +10,11 @@
     display: flex;
     flex-direction: column; }
     .SocialBar > .SocialItem > .SocialIcon {
-      max-width: 200px;
-      max-height: 200px;
-      padding: 50px;
       display: block;
-      width: 100%;
-      height: auto; }
+      padding: 0;
+      width: 100px;
+      height: 100px;
+      margin: 50px; }
     .SocialBar > .SocialItem > .SocialName {
       text-align: center;
       font-size: 2rem; }

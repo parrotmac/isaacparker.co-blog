@@ -7,5 +7,9 @@
     .PortfolioMain {
       flex-direction: column; } }
 
+.PortfolioMain > a {
+  padding-bottom: 4px; }
+
 .PortfolioMain > a.active {
-  background-color: #F6F6F6; }
+  padding-bottom: 0;
+  border-bottom: 4px solid #3098DD; }

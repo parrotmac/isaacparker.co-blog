@@ -89,13 +89,16 @@
     ],
     "plugins": [
       "transform-decorators-legacy",
-      ["react-css-modules", {
-        "filetypes": {
-          ".scss": {
-            "syntax": "postcss-scss"
+      [
+        "react-css-modules",
+        {
+          "filetypes": {
+            ".scss": {
+              "syntax": "postcss-scss"
+            }
           }
         }
-      }]
+      ]
     ]
   },
   "eslintConfig": {
