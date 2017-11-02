@@ -1,0 +1,66 @@
+@import "../../styles/constants.scss";
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 360px;
+
+  @media(max-width: $nav-collapse-width) {
+    flex-direction: column;
+    margin-top: 10px;
+    max-width: 100%;
+  }
+
+  >a {
+    flex-grow: 0;
+    margin-left: 40px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:link, &:visited {
+      margin-top: -2px;
+
+      color: #606060;
+      font-family: Futura, sans-serif;
+      font-weight: normal;
+      text-decoration: none;
+      font-size: 18px;
+      border-color: #FFFFFF;
+
+      transition: border-color 0.25s ease-in-out ;
+
+      @media(max-width: $nav-collapse-width) {
+        margin: 4px 0;
+      }
+
+      &.active, &.active:hover {
+        margin-top: 2px;
+        border-bottom: 4px solid $ip-blue;
+
+        @media(max-width: $nav-collapse-width) {
+          margin-top: 4px;
+          margin-bottom: 0;
+        }
+
+      }
+      &:hover {
+        margin-top: 2px;
+        border-bottom: 4px solid $ip-l-gray;
+
+        @media(max-width: $nav-collapse-width) {
+          margin-top: 4px;
+          margin-bottom: 0;
+        }
+
+      }
+    }
+  }
+  >.search-icon {
+    cursor: pointer;
+    margin-top: 6px;
+    font-weight: bolder;
+  }
+}

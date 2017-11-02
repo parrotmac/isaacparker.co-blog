@@ -1,0 +1,11 @@
+.PortfolioMain {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; }
+  @media (max-width: 640px) {
+    .PortfolioMain {
+      flex-direction: column; } }
+
+.PortfolioMain > a.active {
+  background-color: #F6F6F6; }

@@ -1,0 +1,9 @@
+@import "../../styles/constants.scss";
+
+// This exports styles so they can be used by React thanks to `babel-plugin-react-css-modules`
+//noinspection CssInvalidPseudoSelector
+:export {
+  ipBlue: $ip-blue;
+  ipLightGray: $ip-l-gray;
+  ipDarkGray: $ip-dk-gray;
+}
