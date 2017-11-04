@@ -33,10 +33,7 @@ class Blog extends Component {
 
                     <BlogPost key={index} blogPost={post}/>
 
-                    {/* Use a hr with a smaller margin at the end of the last post */}
-                    {index === blogPosts.length - 1 ?
-                        <HorizontalRule key={`hr-${index}`} width={'80%'} hMargin={'auto'} vMargin={20}/>
-                        :
+                    {index !== blogPosts.length - 1 &&
                         <HorizontalRule key={`hr-${index}`} width={'80%'} hMargin={'auto'} vMargin={50}/>
                     }
                 </div>

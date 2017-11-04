@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import ContainerRow from "./components/ContainerRow";
 import Header from "./components/Header";
 import Blog from "./components/Blog";
 import {
@@ -21,33 +20,33 @@ class App extends Component {
     render() {
         return (
             <Router>
-                <div>
-                    <ContainerRow>
-                        <Header/>
-                    </ContainerRow>
-                    <ContainerRow>
-                        <Main>
-                            <Route exact path="/" component={Blog}/>
+                <div className="RootContainer">
+                    <div className="container">
+                        <div className={'row'}>
+                            <Header/>
+                        </div>
+                        <div className={'row'}>
+                            <Main>
+                                <Route exact path="/" component={Blog}/>
 
-                            <Route exact path="/blog" component={Blog}/>
-                            <Route exact path="/blog/new" component={NewBlogPost}/>
+                                <Route exact path="/blog" component={Blog}/>
+                                <Route exact path="/blog/new" component={NewBlogPost}/>
 
-                            <Route path="/portfolio" component={Portfolio}/>
+                                <Route path="/portfolio" component={Portfolio}/>
 
-                            <Route path={`/portfolio/:projectSlug`} component={PortfolioExpose}/>
+                                <Route path={`/portfolio/:projectSlug`} component={PortfolioExpose}/>
 
-                            <Route exact path="/social" component={Social}/>
+                                <Route exact path="/social" component={Social}/>
 
-                            <Route exact path="/contact" component={Contact}/>
+                                <Route exact path="/contact" component={Contact}/>
 
-                            <Route exact path="/account" component={AuthLanding}/>
+                                <Route exact path="/account" component={AuthLanding}/>
 
-                            <Route exact path="/admin" component={AdminPage}/>
-                        </Main>
-                    </ContainerRow>
-                    <ContainerRow>
-                        <Footer/>
-                    </ContainerRow>
+                                <Route exact path="/admin" component={AdminPage}/>
+                            </Main>
+                        </div>
+                    </div>
+                    <Footer/>
                 </div>
             </Router>
         );

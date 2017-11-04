@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import ContainerRow from "../ContainerRow";
 import './styles/AuthLanding.css';
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
@@ -9,7 +8,7 @@ import {inject, observer} from "mobx-react";
 class AuthLanding extends Component {
     render() {
         return (
-            <ContainerRow>
+            <div>
                 <div className={'col-sm-4 col-sm-offset-2 AuthLanding-Split'}>
                     <h3>Login</h3>
                     <LoginForm/>
@@ -18,8 +17,7 @@ class AuthLanding extends Component {
                     <h3>Register</h3>
                     <RegisterForm/>
                 </div>
-                <pre>{this.props.Authentication.jsonWebToken}</pre>
-            </ContainerRow>
+            </div>
         )
     }
 }

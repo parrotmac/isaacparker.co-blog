@@ -1,3 +1,7 @@
+@import "../../styles/constants.scss";
+
 footer {
+  margin: auto 20px 0 20px;
   padding: 10px;
+  border-top: 1px solid $ip-blue;
 }
