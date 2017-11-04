@@ -14,6 +14,8 @@ import NewBlogPost from "./components/NewBlogPost";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
 import PortfolioExpose from "./components/PortfolioExpose";
+import AuthLanding from "./components/Auth/AuthLanding";
+import AdminPage from "./components/AdminPage";
 
 class App extends Component {
     render() {
@@ -37,6 +39,10 @@ class App extends Component {
                             <Route exact path="/social" component={Social}/>
 
                             <Route exact path="/contact" component={Contact}/>
+
+                            <Route exact path="/account" component={AuthLanding}/>
+
+                            <Route exact path="/admin" component={AdminPage}/>
                         </Main>
                     </ContainerRow>
                     <ContainerRow>

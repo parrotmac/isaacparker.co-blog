@@ -1,17 +1,29 @@
-.ContactInfo {
+.Contact {
   display: flex;
   flex-direction: row; }
-  .ContactInfo .Contact-MyFace {
-    max-height: 250px;
-    max-width: 250px; }
-  .ContactInfo .Contact-Items {
+  @media (max-width: 640px) {
+    .Contact {
+      flex-direction: column; } }
+
+.Contact-MyFace {
+  max-height: 250px;
+  max-width: 250px; }
+  @media (max-width: 640px) {
+    .Contact-MyFace {
+      margin: auto; } }
+
+.Contact-Info {
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #606060; }
+  .Contact-Info .Contact-MyName {
+    margin: 5px 0; }
+  .Contact-Info .Contact-Items {
     list-style: none;
-    margin: 0;
+    margin: 5px 0;
     padding: 0; }
-    .ContactInfo .Contact-Items > li {
-      margin: 0 10px;
+    .Contact-Info .Contact-Items > li {
       padding: 0;
-      font-size: 16px;
-      color: #606060; }
-      .ContactInfo .Contact-Items > li:first-child {
-        margin-top: 0; }
+      font-size: 16px; }

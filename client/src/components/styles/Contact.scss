@@ -1,27 +1,48 @@
 @import "../../styles/constants.scss";
 
-.ContactInfo {
+.Contact {
   display: flex;
   flex-direction: row;
 
-  .Contact-MyFace {
-    max-height: 250px;
-    max-width: 250px;
+  @media(max-width: $nav-collapse-width) {
+    flex-direction: column;
   }
+}
+
+.Contact-MyFace {
+  max-height: 250px;
+  max-width: 250px;
+
+  @media(max-width: $nav-collapse-width) {
+    margin: auto;
+  }
+}
+
+.Contact-Info {
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: $ip-dk-gray;
+
+  .Contact-MyName {
+    margin: 5px 0;
+  }
+
   .Contact-Items {
     list-style: none;
-    margin: 0;
+    margin: 5px 0;
     padding: 0;
 
     >li {
-      margin: 0 10px;
-      &:first-child {
-        margin-top: 0;
-      }
       padding: 0;
       font-size: 16px;
-
-      color: $ip-dk-gray;
     }
   }
+
+  .Contact-AboutMe {
+
+  }
+
 }
+

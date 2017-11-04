@@ -20,15 +20,15 @@
       height: 100px;
       margin: 50px;
 
+      @media(max-width: $nav-collapse-width) {
+        margin: 10px;
+      }
+
       &#SocialIcon-Twitter {
       }
-
       &#SocialIcon-LinkedIn {
-
       }
-
       &#SocialIcon-Github {
-
       }
 
     }

@@ -4,7 +4,6 @@ import {inject, observer} from "mobx-react";
 import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
 import HorizontalRule from "./HorizontalRule";
 
-
 @inject("BlogPost") @observer
 class Blog extends Component {
 
@@ -40,7 +39,6 @@ class Blog extends Component {
                         :
                         <HorizontalRule key={`hr-${index}`} width={'80%'} hMargin={'auto'} vMargin={50}/>
                     }
-
                 </div>
             )
         )

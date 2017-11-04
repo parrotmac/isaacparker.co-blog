@@ -48,6 +48,19 @@ class BlogPost {
         this.fetchState = BLOG_POST_REQUEST_STATES.FAILURE;
     }
 
+    @action
+    uploadBlogPost() {
+        fetch(
+            BLOG_POST_API_URL,
+            {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer `
+                }
+            }
+        )
+    }
+
 }
 
 export default BlogPost

@@ -4,18 +4,23 @@ import {NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
 import './styles/Portfolio.css';
 
-@inject("PortfolioProject") @observer
+@inject("Authentication") @inject("PortfolioProject") @observer
 class Portfolio extends Component {
     render() {
-        return (
-            <div>
+
+        if(this.props.Authentication.userIsSignedIn) {
+            return(
                 <div className={'PortfolioMain'}>
                     {this.props.PortfolioProject.projects.map((project, index) =>
                         <NavLink activeClassName={'active'} to={`/portfolio/${project.slug}`}>
                             <PortfolioSnippet project={project} />
                         </NavLink>)}
                 </div>
-            </div>
+            )
+        }
+
+        return (
+            <h3>Coming Soon</h3>
         )
     }
 }

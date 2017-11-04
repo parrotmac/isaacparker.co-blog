@@ -15,6 +15,9 @@
       width: 100px;
       height: 100px;
       margin: 50px; }
+      @media (max-width: 640px) {
+        .SocialBar > .SocialItem > .SocialIcon {
+          margin: 10px; } }
     .SocialBar > .SocialItem > .SocialName {
       text-align: center;
       font-size: 2rem; }

@@ -51,7 +51,7 @@ func (u *User) createUser(db *gorm.DB) error {
 	return errors.New("unable to create a user")
 }
 
-func (u *User) getUnsafeUser(db *gorm.DB) error {
+func (u *User) getUserUnsafe(db *gorm.DB) error {
 	if err := db.First(&u, u.ID).Error; err != nil {
 		return err
 	}
@@ -61,6 +61,14 @@ func (u *User) getUnsafeUser(db *gorm.DB) error {
 func (u *User) getUser(db *gorm.DB) error {
 	err := db.First(&u, u.ID).Error
 	u.PasswordHash = nil // Overwrite field `PasswordHash` with nil to prevent leakage
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *User) getUserByEmailUnsafe(db *gorm.DB) error {
+	err := db.First(&u).Error
 	if err != nil {
 		return err
 	}
