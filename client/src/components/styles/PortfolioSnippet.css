@@ -1,12 +1,8 @@
-.PortfolioSnippet {
-  display: flex;
-  flex-direction: column;
-  align-items: center; }
-  .PortfolioSnippet .Snippet-CoverImage {
-    display: block;
-    max-width: 200px;
-    max-height: 200px; }
-  .PortfolioSnippet .Snippet-ClientName {
-    text-align: center;
-    margin: 5px 0;
-    padding: 0; }
+.PortfolioSnippet .Snippet-CoverImage {
+  display: block;
+  max-width: 200px;
+  max-height: 200px; }
+
+.PortfolioSnippet .Snippet-ClientName {
+  margin: 5px 0;
+  padding: 0; }

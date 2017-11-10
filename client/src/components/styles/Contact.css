@@ -7,10 +7,12 @@
 
 .Contact-MyFace {
   max-height: 250px;
-  max-width: 250px; }
+  max-width: 250px;
+  width: 100%;
+  height: auto; }
   @media (max-width: 640px) {
     .Contact-MyFace {
-      margin: auto; } }
+      margin: 0; } }
 
 .Contact-Info {
   margin: 0 20px;
@@ -18,8 +20,11 @@
   flex-direction: column;
   justify-content: center;
   color: #606060; }
+  @media (max-width: 640px) {
+    .Contact-Info {
+      margin: 0; } }
   .Contact-Info .Contact-MyName {
-    margin: 5px 0; }
+    margin: 10px 0 5px 0; }
   .Contact-Info .Contact-Items {
     list-style: none;
     margin: 5px 0;

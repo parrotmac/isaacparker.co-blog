@@ -1,0 +1,9 @@
+@import "../../styles/constants.scss";
+
+.PortfolioExpose {
+  margin: 20px 50px;
+
+  @media (max-width: $nav-collapse-width) {
+    margin: 20px 0;
+  }
+}

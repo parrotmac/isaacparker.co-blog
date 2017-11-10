@@ -1,7 +1,23 @@
 @import "../../styles/constants.scss";
 
-footer {
-  margin: auto 20px 0 20px;
-  padding: 10px;
-  border-top: 1px solid $ip-blue;
+div.container.footer-container {
+
+  margin-top: auto;
+
+  > div.row > div.col {
+
+    > footer {
+
+      margin: 10px;
+      padding: 15px 10px;
+      border-top: 1px solid $ip-l-gray;
+
+      > p {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+  }
+
 }

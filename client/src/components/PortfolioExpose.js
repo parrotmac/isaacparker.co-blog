@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {inject, observer} from "mobx-react";
+import './styles/PortfolioExpose.css'
 
-@inject("PortfolioProject") @observer
+@inject("portfolioStore") @observer
 class PortfolioExpose extends Component {
     state = {
         currentProject: undefined
@@ -9,7 +10,7 @@ class PortfolioExpose extends Component {
 
     componentDidMount() {
         this.setState({
-            currentProject: this.props.PortfolioProject.projects.find(project => project.slug === this.props.match.params.projectSlug)
+            currentProject: this.props.portfolioStore.projects.find(project => project.slug === this.props.match.params.projectSlug)
         }, () => {
             this.writeupContainer.innerHTML = this.state.currentProject.writeupBody;
         });
@@ -17,7 +18,7 @@ class PortfolioExpose extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            currentProject: this.props.PortfolioProject.projects.find(project => project.slug === nextProps.match.params.projectSlug)
+            currentProject: this.props.portfolioStore.projects.find(project => project.slug === nextProps.match.params.projectSlug)
         }, () => {
             this.writeupContainer.innerHTML = this.state.currentProject.writeupBody;
         });
@@ -34,7 +35,7 @@ class PortfolioExpose extends Component {
         }
 
         return (
-            <div>
+            <div className={'PortfolioExpose'}>
                 <div ref={div => this.writeupContainer = div}></div>
             </div>
         )

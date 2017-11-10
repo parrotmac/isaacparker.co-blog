@@ -3,6 +3,11 @@
 
 .idea/
 
+# post-processed/compiled css
+client/src/components/styles/*.css
+client/src/styles/*.css
+client/src/App.css
+
 # dependencies
 /client/node_modules
 

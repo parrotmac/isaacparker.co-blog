@@ -1,29 +1,24 @@
 import React, {Component} from 'react'
 import BlogPost from "./BlogPost";
 import {inject, observer} from "mobx-react";
-import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
 import HorizontalRule from "./HorizontalRule";
 
-@inject("BlogPost") @observer
+@inject("blogPostStore") @observer
 class Blog extends Component {
 
-    componentDidMount() {
-        this.props.BlogPost.fetchBlogPosts();
-    }
-
     render() {
-        const {blogPosts, fetchState} = this.props.BlogPost;
+        const {blogPosts, isLoading, loadFailed} = this.props.blogPostStore;
 
-        if(fetchState === BLOG_POST_REQUEST_STATES.REQUESTING || fetchState === BLOG_POST_REQUEST_STATES.INITIAL) {
+        if(isLoading) {
             return (<small>Loading...</small>)
         }
 
-        if(fetchState === BLOG_POST_REQUEST_STATES.FAILURE) {
+        if(loadFailed) {
             return (<small>:( Unable to get blog posts.</small>)
         }
 
 
-        if(BLOG_POST_REQUEST_STATES.SUCCESS && blogPosts.length === 0) {
+        if(!isLoading && blogPosts.length === 0) {
             return (<small>There aren't any blog posts yet.</small>)
         }
 

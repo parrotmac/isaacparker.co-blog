@@ -12,9 +12,11 @@
 .Contact-MyFace {
   max-height: 250px;
   max-width: 250px;
+  width: 100%;
+  height: auto;
 
   @media(max-width: $nav-collapse-width) {
-    margin: auto;
+    margin: 0;
   }
 }
 
@@ -25,8 +27,12 @@
   justify-content: center;
   color: $ip-dk-gray;
 
+  @media(max-width: $nav-collapse-width) {
+    margin: 0;
+  }
+
   .Contact-MyName {
-    margin: 5px 0;
+    margin: 10px 0 5px 0;
   }
 
   .Contact-Items {

@@ -5,7 +5,7 @@ class PortfolioSnippet extends Component {
     render() {
         return (
             <div className={'PortfolioSnippet'}>
-                <img className={'Snippet-CoverImage'} alt={''} src={this.props.project.coverImageURL} />
+                {/*<img className={'Snippet-CoverImage'} alt={''} src={this.props.project.coverImageURL} />*/}
                 <p className={'Snippet-ClientName'}>{this.props.project.clientName}</p>
             </div>
         )

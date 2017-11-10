@@ -1,9 +1,9 @@
 @import '../../styles/constants.scss';
 
-.PortfolioMain {
+.PortfolioLinks {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 
   @media(max-width: $nav-collapse-width) {
@@ -11,12 +11,22 @@
   }
 }
 
-.PortfolioMain > a {
+.PortfolioLinks > a {
   // For underline when .active
   padding-bottom: 4px;
+
+  margin: 5px auto;
+
+  font-size: 16px;
+
+  &:link, &:hover, &:visited {
+    text-decoration: none;
+    color: $ip-dk-gray;
+  }
 }
 
-.PortfolioMain > a.active {
+.PortfolioLinks > a.active {
+
   padding-bottom: 0;
   border-bottom: 4px solid $ip-blue;
 }

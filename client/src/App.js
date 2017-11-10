@@ -21,7 +21,7 @@ class App extends Component {
         return (
             <Router>
                 <div className="RootContainer">
-                    <div className="container">
+                    <div className="container container-full-width">
                         <div className={'row'}>
                             <Header/>
                         </div>

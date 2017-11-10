@@ -1,5 +1,8 @@
 .BlogPost {
   margin: 0 20px; }
+  .BlogPost p img {
+    width: 100%;
+    height: auto; }
   .BlogPost > h3.BlogPost-Title {
     padding: 0;
     margin: 0 0 5px 0;

@@ -1,15 +1,20 @@
-.PortfolioMain {
+.PortfolioLinks {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center; }
   @media (max-width: 640px) {
-    .PortfolioMain {
+    .PortfolioLinks {
       flex-direction: column; } }
 
-.PortfolioMain > a {
-  padding-bottom: 4px; }
+.PortfolioLinks > a {
+  padding-bottom: 4px;
+  margin: 5px auto;
+  font-size: 16px; }
+  .PortfolioLinks > a:link, .PortfolioLinks > a:hover, .PortfolioLinks > a:visited {
+    text-decoration: none;
+    color: #606060; }
 
-.PortfolioMain > a.active {
+.PortfolioLinks > a.active {
   padding-bottom: 0;
   border-bottom: 4px solid #3098DD; }

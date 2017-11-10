@@ -1,21 +1,20 @@
 import React, {Component} from 'react'
-import PortfolioSnippet from "./PortfolioSnippet";
 import {NavLink} from "react-router-dom";
 import {inject, observer} from "mobx-react";
 import './styles/Portfolio.css';
 
-@inject("Authentication") @inject("PortfolioProject") @observer
+@inject("authStore") @inject("portfolioStore") @observer
 class Portfolio extends Component {
     render() {
 
-        if(this.props.Authentication.userIsSignedIn) {
+        if(this.props.authStore.userIsSignedIn) {
             return(
-                <div className={'PortfolioMain'}>
-                    {this.props.PortfolioProject.projects.map((project, index) =>
-                        <NavLink activeClassName={'active'} to={`/portfolio/${project.slug}`}>
-                            <PortfolioSnippet project={project} />
-                        </NavLink>)}
-                </div>
+                    <div className={'PortfolioLinks'}>
+                        {this.props.portfolioStore.projects.map((project, index) =>
+                            <NavLink activeClassName={'active'} to={`/portfolio/${project.slug}`}>
+                                {project.clientName}
+                            </NavLink>)}
+                    </div>
             )
         }
 

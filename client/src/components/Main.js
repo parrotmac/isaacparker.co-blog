@@ -4,7 +4,11 @@ import './styles/Main.css'
 class Main extends Component {
     render() {
         return (
-            <main>{this.props.children}</main>
+            <div className={'col-xs-12'}>
+                <main>
+                    {this.props.children}
+                </main>
+            </div>
         )
     }
 }
