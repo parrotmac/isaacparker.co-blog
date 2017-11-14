@@ -21,7 +21,12 @@ class BlogPost extends Component {
         return (
             <div className={'BlogPost'} key={ID}>
                 <h3 className={'BlogPost-Title'}>{title}</h3>
-                <p className={'BlogPost-Author'}>By UID {user.ID} ({user.firstName}) on {prettyCreatedAtString}</p>
+                <p className={'BlogPost-Meta'}>
+                    {/*<i className="material-icons">person</i>*/}
+                    {/*<span className={"BlogPost-LabelText"}> {user.firstName}</span>*/}
+                    <i className="material-icons">access_time</i>
+                    <span className={"BlogPost-LabelText"}>{prettyCreatedAtString}</span>
+                </p>
                 <div className={'BlogPost-Body'} ref={div => this.blogPostBody = div}>
 
                 </div>

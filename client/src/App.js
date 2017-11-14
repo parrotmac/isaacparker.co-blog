@@ -3,7 +3,7 @@ import './App.css';
 import Header from "./components/Header";
 import Blog from "./components/Blog";
 import {
-    BrowserRouter as Router,
+    BrowserRouter as Router, Redirect,
     Route,
 } from 'react-router-dom'
 import Portfolio from "./components/Portfolio";
@@ -16,6 +16,14 @@ import PortfolioExpose from "./components/PortfolioExpose";
 import AuthLanding from "./components/Auth/AuthLanding";
 import AdminPage from "./components/AdminPage";
 
+class RedirectToBlog extends Component {
+    render() {
+        return (
+            <Redirect to="/blog"/>
+        )
+    }
+}
+
 class App extends Component {
     render() {
         return (
@@ -27,7 +35,7 @@ class App extends Component {
                         </div>
                         <div className={'row'}>
                             <Main>
-                                <Route exact path="/" component={Blog}/>
+                                <Route exact path="/" component={RedirectToBlog}/>
 
                                 <Route exact path="/blog" component={Blog}/>
                                 <Route exact path="/blog/new" component={NewBlogPost}/>

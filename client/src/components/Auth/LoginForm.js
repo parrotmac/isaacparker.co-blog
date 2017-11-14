@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {inject, observer} from "mobx-react";
 
-@inject("Authentication") @observer
+@inject("authStore") @observer
 class LoginForm extends Component {
 
     handleFormSubmit(event) {
         event.preventDefault();
-        this.props.Authentication.requestJsonWebToken(this.emailInput.value, this.passwordInput.value);
+        this.props.authStore.requestJsonWebToken(this.emailInput.value, this.passwordInput.value);
     }
 
     render() {

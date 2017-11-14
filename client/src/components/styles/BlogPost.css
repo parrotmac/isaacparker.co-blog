@@ -1,17 +1,25 @@
 .BlogPost {
   margin: 0 20px; }
   .BlogPost p img {
-    width: 100%;
+    max-width: 100%;
     height: auto; }
   .BlogPost > h3.BlogPost-Title {
     padding: 0;
     margin: 0 0 5px 0;
     color: #606060;
     font-family: Futura, sans-serif; }
-  .BlogPost > p.BlogPost-Author {
+  .BlogPost > p.BlogPost-Meta {
     margin: 5px 0;
     padding: 0;
     color: #95989A;
     font-family: Futura, sans-serif; }
+    .BlogPost > p.BlogPost-Meta > i {
+      font-size: 14px;
+      position: relative;
+      top: 1px;
+      margin: 0 2px 0 0; }
+    .BlogPost > p.BlogPost-Meta > span.BlogPost-LabelText {
+      display: inline-block;
+      margin-top: 10px; }
   .BlogPost > div.BlogPost-Body {
     margin: 5px 0 0 0; }

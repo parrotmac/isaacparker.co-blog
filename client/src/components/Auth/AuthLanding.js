@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import {inject, observer} from "mobx-react";
 
-@inject("Authentication") @observer
+@inject("authStore") @observer
 class AuthLanding extends Component {
     render() {
         return (
