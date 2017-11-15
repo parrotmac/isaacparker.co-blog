@@ -10,16 +10,15 @@ class APIHelper {
         DELETE: 'DELETE'
     };
 
-
     sendFetchRequest(url, authToken, method=this.REQUEST_TYPES.GET, body) {
 
-        const requestOptions = {
+        let requestOptions = {
             method: method,
             credentials: 'include'
         };
 
         if(typeof body !== 'undefined') {
-            requestOptions.body = body;
+            requestOptions.body = JSON.stringify(body);
         }
 
         const constructedRequest = new Request(url, requestOptions);
@@ -34,10 +33,14 @@ class APIHelper {
         return fetch(
             constructedRequest
         ).then(
-            res => res.json()
+            res => {
+                if(res.status === 204) {
+                    return true
+                }
+                return res.json()
+            }
         )
     }
-
 
     getItem(id, authToken) {
         return this.sendFetchRequest(`${this.apiUrlBase}/${id}`, authToken)

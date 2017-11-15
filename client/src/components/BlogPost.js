@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import "./styles/BlogPost.css"
+import {Link} from "react-router-dom";
 
 class BlogPost extends Component {
     componentDidMount() {
@@ -11,7 +12,8 @@ class BlogPost extends Component {
     }
 
     render() {
-        const {ID, title, user, CreatedAt} = this.props.blogPost;
+        const {ID, title, CreatedAt} = this.props.blogPost;
+        const {titleLink} = this.props;
         const createdDT = new Date(Date.parse(CreatedAt));
         const now = new Date();
         const locale = "en-us";
@@ -20,7 +22,13 @@ class BlogPost extends Component {
         const prettyCreatedAtString = `${englishMonth} ${createdDT.getDate()}${yearAddition} at ${createdDT.getHours()}:${createdDT.getMinutes()}`;
         return (
             <div className={'BlogPost'} key={ID}>
-                <h3 className={'BlogPost-Title'}>{title}</h3>
+                <h3 className={'BlogPost-Title'}>
+                    {typeof titleLink === 'undefined' ?
+                        title
+                        :
+                        <Link to={titleLink}>{title}</Link>
+                    }
+                    </h3>
                 <p className={'BlogPost-Meta'}>
                     {/*<i className="material-icons">person</i>*/}
                     {/*<span className={"BlogPost-LabelText"}> {user.firstName}</span>*/}

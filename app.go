@@ -78,14 +78,14 @@ func (a *App) initializeApiRoutes() {
 	userRouter.HandleFunc("", loginRequired(a.getUsers)).Methods("GET")
 	userRouter.HandleFunc("", loginRequired(a.createUser)).Methods("POST")
 	userRouter.HandleFunc("/{id:[0-9]+}", a.getUser).Methods("GET")
-	userRouter.HandleFunc("/{id:[0-9]+}", loginRequired(a.updateUser)).Methods("PUT")
+	userRouter.HandleFunc("/{id:[0-9]+}", loginRequired(a.updateUser)).Methods("PATCH")
 	userRouter.HandleFunc("/{id:[0-9]+}", loginRequired(a.deleteUser)).Methods("DELETE")
 
 	postsRouter := a.APIRouter.PathPrefix("/posts").Subrouter()
 	postsRouter.HandleFunc("", a.getPosts).Methods("GET")
 	postsRouter.HandleFunc("", loginRequired(a.createPost)).Methods("POST")
 	postsRouter.HandleFunc("/{id:[0-9]+}", a.getPost).Methods("GET")
-	postsRouter.HandleFunc("/{id:[0-9]+}", loginRequired(a.updatePost)).Methods("PUT")
+	postsRouter.HandleFunc("/{id:[0-9]+}", loginRequired(a.updatePost)).Methods("PATCH")
 	postsRouter.HandleFunc("/{id:[0-9]+}", loginRequired(a.deletePost)).Methods("DELETE")
 
 	managementRouter := a.APIRouter.PathPrefix("/manage").Subrouter()
@@ -197,11 +197,66 @@ func (a *App) createPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) updatePost(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, http.StatusNotImplemented, "Not yet implemented")
+	requestVars := mux.Vars(r)
+	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
+
+	// :id is required, check for that
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid post ID")
+		return
+	}
+
+	// Get current blog post to ensure it exists
+	bp := BlogPost{}
+	if err := bp.getBlogPost(a.DB, uint(requestedId)); err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+
+	// Decode json into fetched blog post
+	if err := decoder.Decode(&bp); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid post request payload")
+		return
+	}
+
+	// Update user
+	// TODO: Update based on validated JWT claims
+	u := User{}
+	u.ID = uint(bp.UserID)
+	u.getUser(a.DB)
+
+	bp.User = u
+
+	if err := bp.updateBlogPost(a.DB); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid post request payload -- " + err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusCreated, bp)
 }
 
 func (a *App) deletePost(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, http.StatusNotImplemented, "Not yet implemented")
+	requestVars := mux.Vars(r)
+	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
+
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	bp := BlogPost{}
+	bp.ID = uint(requestedId)
+	err = bp.deleteBlogPost(a.DB);
+
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
@@ -230,6 +285,10 @@ func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
 	respondWithJSON(w, code, map[string]string{"error": message})
+}
+
+func respondWithStatus(w http.ResponseWriter, code int, message string) {
+	respondWithJSON(w, code, map[string]string{"status": message})
 }
 
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {

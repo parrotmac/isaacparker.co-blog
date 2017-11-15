@@ -1,0 +1,9 @@
+@import '../../../styles/constants.scss';
+
+.Toolbar {
+  display: flex;
+  justify-content: flex-start;
+  background-color: $ip-l-gray;
+  padding: 10px;
+  //margin: 20px 0;
+}

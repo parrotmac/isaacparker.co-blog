@@ -7,10 +7,11 @@ import APIHelper from "../utils/APIHelper";
 const userAPIHelper = new APIHelper('/api/users');
 const blogPostAPIHelper = new APIHelper('/api/posts');
 
-const userStore = new User(userAPIHelper);
-const blogPostStore = new BlogPostStore(blogPostAPIHelper);
-const portfolioStore = new PortfolioProject();
 const authenticationStore = new Authentication();
+
+const userStore = new User(userAPIHelper);
+const blogPostStore = new BlogPostStore(blogPostAPIHelper, userStore, authenticationStore);
+const portfolioStore = new PortfolioProject();
 
 const RootStore = {
     userStore: userStore,

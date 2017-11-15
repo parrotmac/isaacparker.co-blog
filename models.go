@@ -108,7 +108,11 @@ func (b *BlogPost) getBlogPost(db *gorm.DB, id uint) error {
 }
 
 func (b *BlogPost) updateBlogPost(db *gorm.DB) error {
-	return errors.New("not implemented")
+	err := db.Save(&b).Error
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (b *BlogPost) deleteBlogPost(db *gorm.DB) error {
@@ -120,7 +124,7 @@ func (b *BlogPost) deleteBlogPost(db *gorm.DB) error {
 func getBlogPostListing(db *gorm.DB) []BlogPost {
 	blogPosts := []BlogPost{}
 	//users := []User{}
-	db.Preload("User").Find(&blogPosts)
+	db.Preload("User").Order("created_at desc").Find(&blogPosts)
 
 	// Again, excluding PasswordHash as a best practice
 	for i := range blogPosts {

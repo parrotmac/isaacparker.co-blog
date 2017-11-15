@@ -8,9 +8,21 @@ class EditorPane extends Component {
         onChange: PropTypes.func
     };
 
-    state = {
-        value: RichTextEditor.createEmptyValue(),
-    };
+    constructor(props) {
+        super(props);
+
+        let initialValue;
+        if(typeof this.props.initialValue !== 'undefined') {
+            initialValue = RichTextEditor.createValueFromString(this.props.initialValue, 'html');
+        } else {
+            initialValue = RichTextEditor.createEmptyValue();
+        }
+
+        this.state = {
+            value: initialValue
+        };
+
+    }
 
     onChange = (value) => {
         this.setState({value});

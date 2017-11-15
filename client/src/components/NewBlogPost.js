@@ -1,22 +1,50 @@
 import React, {Component} from 'react'
 import EditorPane from "./EditorPane";
 import {inject, observer} from "mobx-react";
+import {Redirect} from "react-router-dom";
 
 @inject("blogPostStore") @observer
 class NewBlogPost extends Component {
     state = {
-        blogPostBody: ""
+        blogPostBody: "",
+        redirectId: null,
+        shouldRedirect: false
     };
 
     onSavePost() {
-        this.props.BlogPost.uploadBlogPost({
+        let newBlogPost = this.props.blogPostStore.createBlogPost();
+        newBlogPost.updateFromJson({
             title: this.titleInput.value,
             body: this.state.blogPostBody,
-            isPublished: true
+            createdAt: new Date()
         });
+        newBlogPost.saveInstance().then(
+            savedBlogPost => {
+                this.setState({
+                    redirectId: savedBlogPost.ID,
+                })
+            }
+        );
+        window.newBlogPost = newBlogPost;
+    }
+
+    componentWillReact() {
+        const createdBlogPost = this.props.blogPostStore.blogPosts.find(bp => bp.ID === this.state.redirectId);
+        if(typeof createdBlogPost !== 'undefined') {
+            this.setState({
+                shouldRedirect: true
+            })
+        }
     }
 
     render() {
+
+        if(this.state.shouldRedirect) {
+            return (
+                <Redirect to={`/blog/${this.state.redirectId}`} />
+            )
+        }
+
         return (
             <div>
                 <h3>Start a new post</h3>

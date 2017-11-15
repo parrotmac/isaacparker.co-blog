@@ -9,24 +9,22 @@ class BlogPost {
     constructor(store, id=null) {
         this.store = store;
         this.id = id;
+        this.autoSave = true;
 
+        const ctx = this;
         this.saveHandler = reaction(
-            () => this.asJson,
+            () => ctx.asJson,
             (json) => {
-                if(this.autoSave) {
-                    this.store.apiHelper.saveBlogPost(json)
+                if(ctx.autoSave) {
+                    ctx.store.saveBlogPost(json)
                 }
             }
         )
     }
 
-    delete() {
-        this.store.removeBlogPost(this.id);
-    }
-
     @computed get asJson() {
         return {
-            id: this.id,
+            ID: this.id,
             title: this.title,
             body: this.body,
             createdAt: this.createdAt
@@ -41,9 +39,17 @@ class BlogPost {
         this.autoSave = true;
     }
 
-    dispose() {
-        this.saveHandler();
+    saveInstance() {
+        return this.store.saveBlogPost({
+            title: this.title,
+            body: this.body,
+            createdAt: this.createdAt
+        })
     }
+
+    // dispose() {
+    //     this.saveHandler();
+    // }
 }
 
 export const BLOG_POST_REQUEST_STATES = {
@@ -59,10 +65,13 @@ class BlogPostStore {
     @observable blogPosts = [];
     @observable isLoading = true;
     @observable loadFailed = false;
+    @observable errorText = null;
 
-    constructor(apiHelper, userStore) {
+    constructor(apiHelper, userStore, authenticationStore) {
         this.apiHelper = apiHelper;
+        console.log("APIHELPER", apiHelper);
         this.userStore = userStore; // TODO: Hookup once UserStore is mature
+        this.authenticationStore = authenticationStore;
         this.loadBlogPosts();
     }
 
@@ -75,23 +84,44 @@ class BlogPostStore {
             this.blogPosts = fetchedBlogPosts;
             // fetchedBlogPosts.forEach(json => this.updateTodoFromServer(json));
             this.isLoading = false;
+            this.loadFailed = false;
         }).catch(err => {
             this.loadFailed = true;
         })
     }
 
-    // updateTodoFromServer(json) {
-    //     let blogPost = this.blogPosts.find(blogPost => blogPost.id === json.id);
-    //     if (!blogPost) {
-    //         blogPost = new BlogPost(this, json.id);
-    //         this.blogPosts.push(blogPost);
-    //     }
-    //     if (json.isDeleted) {
-    //         this.removeBlogPost(blogPost);
-    //     } else {
-    //         blogPost.updateFromJson(json);
-    //     }
-    // }
+    saveBlogPost(blogPostJson) {
+        if('ID' in blogPostJson) {
+            this.apiHelper.saveItem(blogPostJson.ID, blogPostJson, this.authenticationStore.jsonWebToken)
+        } else {
+            return this.apiHelper.addItem(blogPostJson, this.authenticationStore.jsonWebToken).then(
+                newBlogPost => {
+                    const newPostIndex = this.blogPosts.indexOf(bp => bp.ID === newBlogPost.ID);
+                    if (newPostIndex < 0) {
+                        this.blogPosts.push(newBlogPost);
+                        return newBlogPost
+                    }
+                }
+            )
+        }
+    }
+
+    deleteBlogPost(blogPost) {
+        this.isLoading = true;
+        return this.apiHelper.deleteItem(blogPost.ID, this.authenticationStore.jsonWebToken).then(
+            didDelete => {
+                this.blogPosts.splice(this.blogPosts.indexOf(blogPost), 1);
+                this.isLoading = false;
+                return didDelete
+            }
+        ).catch(
+            err => {
+                this.isLoading = false;
+                this.loadFailed = true;
+                this.errorText = err;
+            }
+        )
+    }
 
     /**
      * Creates a fresh blog post
@@ -100,14 +130,6 @@ class BlogPostStore {
         const blogPost = new BlogPost(this);
         this.blogPosts.push(blogPost);
         return blogPost;
-    }
-
-    /**
-     * Remove blog post from local store
-     */
-    removeBlogPost(blogPost) {
-        this.blogPosts.splice(this.blogPosts.indexOf(blogPost), 1);
-        blogPost.dispose();
     }
 
 }
