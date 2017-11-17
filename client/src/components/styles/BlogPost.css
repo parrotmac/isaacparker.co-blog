@@ -23,7 +23,7 @@
       margin-top: 10px; }
   .BlogPost > div.BlogPost-Body {
     margin: 5px 0 0 0; }
-    .BlogPost > div.BlogPost-Body > p {
+    .BlogPost > div.BlogPost-Body > p, .BlogPost > div.BlogPost-Body li {
       font-family: "open-sans", sans-serif; }
     .BlogPost > div.BlogPost-Body code {
       font-family: "source-code-pro", "Inconsolata", "Menlo", "Consolas", monospace; }
