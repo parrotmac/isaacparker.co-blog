@@ -19,7 +19,7 @@
     margin: 5px 0;
     padding: 0;
     color: $ip-l-gray;
-    font-family: $ip-body-font-family;
+    font-family: sans-serif;
 
     >i {
       font-size: 14px;
@@ -36,6 +36,16 @@
 
   >div.BlogPost-Body {
     margin: 5px 0 0 0;
+
+
+    >p {
+      font-family: $ip-article-body-font-family;
+    }
+
+    code {
+      font-family: "source-code-pro", "Inconsolata", "Menlo", "Consolas", monospace;
+    }
+
   }
 
 }

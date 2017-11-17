@@ -12,7 +12,7 @@
     margin: 5px 0;
     padding: 0;
     color: #95989A;
-    font-family: Futura, sans-serif; }
+    font-family: sans-serif; }
     .BlogPost > p.BlogPost-Meta > i {
       font-size: 14px;
       position: relative;
@@ -23,3 +23,7 @@
       margin-top: 10px; }
   .BlogPost > div.BlogPost-Body {
     margin: 5px 0 0 0; }
+    .BlogPost > div.BlogPost-Body > p {
+      font-family: "open-sans", sans-serif; }
+    .BlogPost > div.BlogPost-Body code {
+      font-family: "source-code-pro", "Inconsolata", "Menlo", "Consolas", monospace; }
