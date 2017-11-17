@@ -6,6 +6,7 @@ import Toolbar from "./Admin/Toolbar";
 import EditorPane from "./EditorPane";
 import HorizontalRule from "./HorizontalRule";
 import {Link, Redirect} from "react-router-dom";
+import ModestCommentsSection from "./ModestCommentsSection";
 
 @inject("blogPostStore") @observer
 class BlogPostPage extends Component {
@@ -132,6 +133,8 @@ class BlogPostPage extends Component {
                     <HorizontalRule vMargin={20} hMargin={50} />
                 </AdminOnly>
                 <BlogPost blogPost={this.currentBlogPost}/>
+                <HorizontalRule/>
+                <ModestCommentsSection pageTitle={this.currentBlogPost.title} pageId={`blog-post-${this.currentBlogPost.ID}`} fullUrl={window.location.href}/>
             </div>
         )
     }

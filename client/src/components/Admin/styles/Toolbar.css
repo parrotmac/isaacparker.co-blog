@@ -1,0 +1,5 @@
+.Toolbar {
+  display: flex;
+  justify-content: flex-start;
+  background-color: #95989A;
+  padding: 10px; }

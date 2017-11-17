@@ -69,7 +69,6 @@ class BlogPostStore {
 
     constructor(apiHelper, userStore, authenticationStore) {
         this.apiHelper = apiHelper;
-        console.log("APIHELPER", apiHelper);
         this.userStore = userStore; // TODO: Hookup once UserStore is mature
         this.authenticationStore = authenticationStore;
         this.loadBlogPosts();

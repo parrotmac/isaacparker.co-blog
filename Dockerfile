@@ -1,5 +1,7 @@
 FROM node:8-alpine as client-builder
 
+RUN apk update && apk add git
+
 WORKDIR /usr/src/app
 
 ADD client/package.json /usr/src/app/

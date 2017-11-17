@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 import {inject, observer} from "mobx-react";
 
 @inject("authStore") @observer
@@ -9,7 +9,7 @@ class AdminOnly extends Component {
         const {jsonWebToken} = this.props.authStore;
 
         if(jsonWebToken === null) {
-            return <none/>
+            return null
         }
         return this.props.children
     }
