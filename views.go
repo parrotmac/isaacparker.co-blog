@@ -6,6 +6,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strconv"
+	"github.com/dgrijalva/jwt-go"
+	"log"
 )
 
 func (a *App) createUser(w http.ResponseWriter, r *http.Request) {
@@ -161,7 +163,7 @@ func (a *App) deletePost(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
+func (a *App) getPost(w http.ResponseWriter, r *http.Request, claims jwt.Claims) {
 	requestVars := mux.Vars(r)
 	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
 
@@ -179,7 +181,23 @@ func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, bp)
 }
 
-func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
-	blogPosts := getPublishedBlogPosts(a.DB)
+func (a *App) getPosts(w http.ResponseWriter, r *http.Request, claims jwt.Claims) {
+
+	isAdmin := false
+	if claims != nil {
+		log.Println(claims)
+		isAdmin = claims.(jwt.MapClaims)["isAdmin"].(bool)
+	}
+
+	var blogPosts[] BlogPost
+
+	if isAdmin {
+		blogPosts = getAllBlogPosts(a.DB)
+		log.Println("IS ADMIN")
+	} else {
+		blogPosts = getPublishedBlogPosts(a.DB)
+		log.Println("NOT ADMIN")
+	}
+
 	respondWithJSON(w, http.StatusOK, blogPosts)
 }

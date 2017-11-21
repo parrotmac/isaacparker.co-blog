@@ -44,7 +44,7 @@ class BlogPostPage extends Component {
         if(window.confirm("Delete this 4 realz?")) {
             this.props.blogPostStore.deleteBlogPost(this.currentBlogPost).then(
                 didDelete => {
-                    // Settings `wasDeleted` to result of call. This way we can redirect to the main page after deletion
+                    // Setting `wasDeleted` to result of call. This way we can redirect to the main page after deletion
                     this.setState({
                         wasDeleted: didDelete
                     })
@@ -127,7 +127,10 @@ class BlogPostPage extends Component {
                     </Toolbar>
                     <details style={{backgroundColor: "#C0C0C0"}}>
                         <summary style={{padding: 10}}>Edit Blog Post</summary>
-                        <input type={'text'} value={this.currentBlogPost.title} onChange={this.onTitleChanged} />
+                        <input type={'text'} size={'40'} value={this.currentBlogPost.title} onChange={this.onTitleChanged} />
+                        <label>Published:
+                            <input type={'checkbox'} checked={this.currentBlogPost.isPublished} onChange={event => this.currentBlogPost.isPublished = event.target.checked}/>
+                        </label>
                         <EditorPane onChange={this.onEditorChangedValue} initialValue={this.currentBlogPost.body}/>
                     </details>
                     <HorizontalRule vMargin={20} hMargin={50} />

@@ -4,6 +4,7 @@ class BlogPost {
     @observable id = null;
     @observable title = "";
     @observable body = "";
+    @observable isPublished = false;
     @observable createdAt = new Date();
 
     constructor(store, id=null) {
@@ -27,6 +28,7 @@ class BlogPost {
             ID: this.id,
             title: this.title,
             body: this.body,
+            isPublished: this.isPublished,
             createdAt: this.createdAt
         }
     }
@@ -35,6 +37,7 @@ class BlogPost {
         this.autoSave = false;
         this.title = json.title;
         this.body = json.body;
+        this.isPublished = json.isPublished;
         this.createdAt = json.createdAt;
         this.autoSave = true;
     }
@@ -43,13 +46,11 @@ class BlogPost {
         return this.store.saveBlogPost({
             title: this.title,
             body: this.body,
+            isPublished: this.isPublished,
             createdAt: this.createdAt
         })
     }
 
-    // dispose() {
-    //     this.saveHandler();
-    // }
 }
 
 export const BLOG_POST_REQUEST_STATES = {
@@ -79,9 +80,8 @@ class BlogPostStore {
      */
     loadBlogPosts() {
         this.isLoading = true;
-        this.apiHelper.getItemsListing().then(fetchedBlogPosts => {
+        this.apiHelper.getItemsListing(this.authenticationStore.jsonWebToken).then(fetchedBlogPosts => {
             this.blogPosts = fetchedBlogPosts;
-            // fetchedBlogPosts.forEach(json => this.updateTodoFromServer(json));
             this.isLoading = false;
             this.loadFailed = false;
         }).catch(err => {

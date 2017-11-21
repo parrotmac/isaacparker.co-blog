@@ -63,6 +63,27 @@ func (a *App) authenticate(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func injectJWTClaims(next func(w http.ResponseWriter, r *http.Request, claims jwt.Claims)) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		authHeader := r.Header.Get("Authorization")
+
+		if authHeader == "" {
+			next(w, r, nil)
+			return
+		}
+
+		clientToken := strings.Replace(authHeader, "Bearer ", "", 1)
+		claims, err := verifyToken(clientToken)
+		if err != nil {
+			next(w, r, nil)
+			return
+		}
+
+		next(w, r, claims)
+	})
+}
+
 func loginRequired(next func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
