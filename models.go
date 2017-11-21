@@ -1,45 +1,45 @@
 package main
 
 import (
-	"time"
-	"github.com/jinzhu/gorm"
 	"errors"
+	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type UnsafeUser struct {
-	Email string `json:"email"`
+	Email     string `json:"email"`
 	FirstName string `json:"firstName"`
-	LastName string `json:"lastName"`
-	IsAdmin bool `json:"isAdmin"`
-	Password string `json:"password"`
+	LastName  string `json:"lastName"`
+	IsAdmin   bool   `json:"isAdmin"`
+	Password  string `json:"password"`
 }
 
 type User struct {
 	gorm.Model
-	Email string `json:"email"`
-	FirstName string `json:"firstName"`
-	LastName string `json:"lastName"`
-	IsAdmin bool `json:"isAdmin"`
-	PasswordHash []byte  // This should never be used with JSON
+	Email        string `json:"email"`
+	FirstName    string `json:"firstName"`
+	LastName     string `json:"lastName"`
+	IsAdmin      bool   `json:"isAdmin"`
+	PasswordHash []byte // This should never be used with JSON
 }
 
 type BlogPost struct {
 	gorm.Model
-	User User `gorm:"ForeignKey:UserID" json:"user"`
-	UserID int `json:"userId"`
-	IsPublished bool `json:"isPublished"`
-	Title string `json:"title"`
-	Date time.Time `json:"date"`
-	Body string `sql:"type:text" json:"body"`
+	User        User      `gorm:"ForeignKey:UserID" json:"user"`
+	UserID      int       `json:"userId"`
+	IsPublished bool      `json:"isPublished"`
+	Title       string    `json:"title"`
+	Date        time.Time `json:"date"`
+	Body        string    `sql:"type:text" json:"body"`
 }
 
 type PortfolioProject struct {
 	gorm.Model
-	Slug string `json:"slug"` // Used if referenced in a url
-	Title string `json:"title"`
+	Slug          string `json:"slug"` // Used if referenced in a url
+	Title         string `json:"title"`
 	CoverImageURL string `json:"coverImageURL"`
-	ClientName string `json:"clientName"`
-	WriteupBody string `sql:"type:text" json:"writeupBody"`
+	ClientName    string `json:"clientName"`
+	WriteupBody   string `sql:"type:text" json:"writeupBody"`
 }
 
 func (u *User) createUser(db *gorm.DB) error {
@@ -83,12 +83,11 @@ func (u *User) deleteUser(db *gorm.DB) error {
 	return errors.New("not implemented")
 }
 
-func getUserListing(db *gorm.DB) ([]User) {
+func getUserListing(db *gorm.DB) []User {
 	users := []User{}
 	db.Find(&users)
 	return users
 }
-
 
 func (b *BlogPost) createBlogPost(db *gorm.DB) error {
 	created := db.NewRecord(b)
@@ -121,7 +120,20 @@ func (b *BlogPost) deleteBlogPost(db *gorm.DB) error {
 	//return errors.New("not implemented")
 }
 
-func getBlogPostListing(db *gorm.DB) []BlogPost {
+func getPublishedBlogPosts(db *gorm.DB) []BlogPost {
+	blogPosts := []BlogPost{}
+	//users := []User{}
+	db.Preload("User").Order("created_at desc").Where("is_published = true").Find(&blogPosts)
+
+	// Again, excluding PasswordHash as a best practice
+	for i := range blogPosts {
+		blogPosts[i].User.PasswordHash = nil
+	}
+
+	return blogPosts
+}
+
+func getAllBlogPosts(db *gorm.DB) []BlogPost {
 	blogPosts := []BlogPost{}
 	//users := []User{}
 	db.Preload("User").Order("created_at desc").Find(&blogPosts)

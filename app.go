@@ -1,21 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"log"
-	"fmt"
 	"net/http"
-	"encoding/json"
-	"golang.org/x/crypto/bcrypt"
-	"strconv"
 )
 
 type App struct {
-	Router *mux.Router
+	Router    *mux.Router
 	APIRouter *mux.Router
-	DB *gorm.DB
+	DB        *gorm.DB
 }
 
 func (a *App) Initialize(hostname string, port int, user, password, dbname string) {
@@ -28,13 +25,13 @@ func (a *App) Initialize(hostname string, port int, user, password, dbname strin
 		log.Fatal(err)
 	}
 
-	if ! a.DB.HasTable(&User{}) {
+	if !a.DB.HasTable(&User{}) {
 		a.DB.CreateTable(&User{})
 	}
-	if ! a.DB.HasTable(&BlogPost{}) {
+	if !a.DB.HasTable(&BlogPost{}) {
 		a.DB.CreateTable(&BlogPost{})
 	}
-	if ! a.DB.HasTable(&PortfolioProject{}) {
+	if !a.DB.HasTable(&PortfolioProject{}) {
 		a.DB.CreateTable(&PortfolioProject{})
 	}
 
@@ -53,8 +50,6 @@ func (a *App) Initialize(hostname string, port int, user, password, dbname strin
 func (a *App) Run(addr string) {
 	log.Fatal(http.ListenAndServe(addr, a.Router))
 }
-
-
 
 func (a *App) initializeFrontendRoutes() {
 
@@ -102,199 +97,4 @@ func (a *App) manageCreate(w http.ResponseWriter, r *http.Request) {
 func (a *App) manageMigrate(w http.ResponseWriter, r *http.Request) {
 	a.DB.AutoMigrate(&User{}, &BlogPost{})
 	respondWithJSON(w, http.StatusCreated, "DB Tables Migrated")
-}
-
-
-func (a *App) createUser(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-
-	unsafeUserDecoder := json.NewDecoder(r.Body)
-	var unsafeUser UnsafeUser
-	if err := unsafeUserDecoder.Decode(&unsafeUser); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
-
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(unsafeUser.Password), 10) // TODO: Use env var
-
-	newUser := User{
-		Email:unsafeUser.Email,
-		PasswordHash:hashedPassword,
-		FirstName:unsafeUser.FirstName,
-		LastName:unsafeUser.LastName,
-		IsAdmin:unsafeUser.IsAdmin,
-	}
-
-	if err := newUser.createUser(a.DB); err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	respondWithJSON(w, http.StatusCreated, newUser)
-}
-
-func (a *App) updateUser(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, http.StatusNotImplemented, "Not yet implemented")
-}
-
-func (a *App) deleteUser(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, http.StatusNotImplemented, "Not yet implemented")
-}
-
-func (a *App) getUser(w http.ResponseWriter, r *http.Request) {
-
-	requestVars := mux.Vars(r)
-	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
-
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	u := User{}
-	u.ID = uint(requestedId)
-	if err := u.getUser(a.DB); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	respondWithJSON(w, http.StatusOK, u)
-}
-
-func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
-	users := getUserListing(a.DB)
-	//if err != nil {
-	//	respondWithError(w, http.StatusInternalServerError, err.Error())
-	//	return
-	//}
-
-	respondWithJSON(w, http.StatusOK, users)
-}
-
-
-func (a *App) createPost(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	decoder := json.NewDecoder(r.Body)
-
-	var bp BlogPost
-	if err := decoder.Decode(&bp); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid post request payload")
-		return
-	}
-
-	u := User{}
-	u.ID = uint(bp.UserID)
-	u.getUser(a.DB)
-
-	bp.User = u
-
-	if err := bp.createBlogPost(a.DB); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid post request payload -- " + err.Error())
-		return
-	}
-
-	respondWithJSON(w, http.StatusCreated, bp)
-}
-
-func (a *App) updatePost(w http.ResponseWriter, r *http.Request) {
-	requestVars := mux.Vars(r)
-	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
-
-	// :id is required, check for that
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid post ID")
-		return
-	}
-
-	// Get current blog post to ensure it exists
-	bp := BlogPost{}
-	if err := bp.getBlogPost(a.DB, uint(requestedId)); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	decoder := json.NewDecoder(r.Body)
-	defer r.Body.Close()
-
-	// Decode json into fetched blog post
-	if err := decoder.Decode(&bp); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid post request payload")
-		return
-	}
-
-	// Update user
-	// TODO: Update based on validated JWT claims
-	u := User{}
-	u.ID = uint(bp.UserID)
-	u.getUser(a.DB)
-
-	bp.User = u
-
-	if err := bp.updateBlogPost(a.DB); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid post request payload -- " + err.Error())
-		return
-	}
-
-	respondWithJSON(w, http.StatusCreated, bp)
-}
-
-func (a *App) deletePost(w http.ResponseWriter, r *http.Request) {
-	requestVars := mux.Vars(r)
-	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
-
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	bp := BlogPost{}
-	bp.ID = uint(requestedId)
-	err = bp.deleteBlogPost(a.DB);
-
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
-	requestVars := mux.Vars(r)
-	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
-
-	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid post ID")
-		return
-	}
-
-	bp := BlogPost{}
-	if err := bp.getBlogPost(a.DB, uint(requestedId)); err != nil {
-		respondWithError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	respondWithJSON(w, http.StatusOK, bp)
-}
-
-func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
-	blogPosts := getBlogPostListing(a.DB)
-	respondWithJSON(w, http.StatusOK, blogPosts)
-}
-
-
-func respondWithError(w http.ResponseWriter, code int, message string) {
-	respondWithJSON(w, code, map[string]string{"error": message})
-}
-
-func respondWithStatus(w http.ResponseWriter, code int, message string) {
-	respondWithJSON(w, code, map[string]string{"status": message})
-}
-
-func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(response)
 }
