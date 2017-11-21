@@ -23,8 +23,10 @@ WORKDIR /go/src/app
 
 ADD app.go /go/src/app
 ADD main.go /go/src/app
+ADD views.go /go/src/app
 ADD models.go /go/src/app
 ADD auth.go /go/src/app
+ADD httputils.go /go/src/app
 ADD jwtutils.go /go/src/app
 
 RUN go-wrapper download
