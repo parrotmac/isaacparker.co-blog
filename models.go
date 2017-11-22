@@ -117,12 +117,10 @@ func (b *BlogPost) updateBlogPost(db *gorm.DB) error {
 func (b *BlogPost) deleteBlogPost(db *gorm.DB) error {
 	db.Delete(&b)
 	return nil
-	//return errors.New("not implemented")
 }
 
 func getPublishedBlogPosts(db *gorm.DB) []BlogPost {
 	blogPosts := []BlogPost{}
-	//users := []User{}
 	db.Preload("User").Order("created_at desc").Where("is_published = true").Find(&blogPosts)
 
 	// Again, excluding PasswordHash as a best practice
@@ -135,7 +133,6 @@ func getPublishedBlogPosts(db *gorm.DB) []BlogPost {
 
 func getAllBlogPosts(db *gorm.DB) []BlogPost {
 	blogPosts := []BlogPost{}
-	//users := []User{}
 	db.Preload("User").Order("created_at desc").Find(&blogPosts)
 
 	// Again, excluding PasswordHash as a best practice

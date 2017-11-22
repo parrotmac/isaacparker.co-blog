@@ -6,11 +6,10 @@ class User {
         this.apiHelper = apiHelper;
     }
 
-    store;
-    id;
+    @observable store;
+    @observable id;
     @observable email;
-    isAdmin;
-
+    @observable isAdmin;
 }
 
 export default User

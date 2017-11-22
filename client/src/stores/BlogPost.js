@@ -82,11 +82,13 @@ class BlogPostStore {
      */
     loadBlogPosts() {
         this.status = BLOG_POST_REQUEST_STATES.REQUESTING;
-        this.apiHelper.getItemsListing(this.authenticationStore.jsonWebToken).then(fetchedBlogPosts => {
+        this.apiHelper.getItemsListing(
+            this.authenticationStore.jsonWebToken
+        ).then(fetchedBlogPosts => {
             this.blogPosts = fetchedBlogPosts;
-            // TODO: Switch to status types rather than booleans
             this.status = BLOG_POST_REQUEST_STATES.SUCCESS;
         }).catch(err => {
+            this.errorText = err;
             this.status = BLOG_POST_REQUEST_STATES.FAILURE;
         })
     }
@@ -94,7 +96,9 @@ class BlogPostStore {
     saveBlogPost(blogPostJson) {
         this.status = BLOG_POST_REQUEST_STATES.UPDATING;
         if('ID' in blogPostJson) {
-            return this.apiHelper.saveItem(blogPostJson.ID, blogPostJson, this.authenticationStore.jsonWebToken).then(
+            return this.apiHelper.saveItem(
+                blogPostJson.ID, blogPostJson, this.authenticationStore.jsonWebToken
+            ).then(
                 res => {
                     this.status = BLOG_POST_REQUEST_STATES.SUCCESS;
                 }
@@ -120,7 +124,10 @@ class BlogPostStore {
 
     deleteBlogPost(blogPost) {
         this.status = BLOG_POST_REQUEST_STATES.DELETING;
-        return this.apiHelper.deleteItem(blogPost.ID, this.authenticationStore.jsonWebToken).then(
+        return this.apiHelper.deleteItem(
+            blogPost.ID,
+            this.authenticationStore.jsonWebToken
+        ).then(
             didDelete => {
                 this.blogPosts.splice(this.blogPosts.indexOf(blogPost), 1);
                 this.status = BLOG_POST_REQUEST_STATES.DELETED;

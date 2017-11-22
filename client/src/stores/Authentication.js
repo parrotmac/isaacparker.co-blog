@@ -22,7 +22,7 @@ const storeJsonWebToken = (jwt) => {
 
 const clearStoredJsonWebToken = () => {
     localStorage.removeItem("JWT");
-}
+};
 
 class Authentication {
     @observable jsonWebToken = getStoredJsonWebToken();
@@ -34,8 +34,8 @@ class Authentication {
             }
         });
         const responseBody = await response.json();
-        if("status" in responseBody) {
-            return responseBody.status === "success"
+        if("status" in responseBody && responseBody.status === "success") {
+            return true
         }
         clearStoredJsonWebToken();
         return false

@@ -16,6 +16,7 @@ import PortfolioExpose from "./components/PortfolioExpose";
 import AuthLanding from "./components/Auth/AuthLanding";
 import AdminPage from "./components/AdminPage";
 import BlogPostPage from "./components/BlogPostPage";
+import AuthInitializer from "./components/AuthInitializer";
 
 class RedirectToBlog extends Component {
     render() {
@@ -30,6 +31,7 @@ class App extends Component {
         return (
             <Router>
                 <div className="RootContainer">
+                    <AuthInitializer />
                     <div className="container container-full-width">
                         <div className={'row'}>
                             <Header/>

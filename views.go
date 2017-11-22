@@ -167,6 +167,15 @@ func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
 	requestVars := mux.Vars(r)
 	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
 
+	claims := a.getClaims(r)
+
+	isAdmin := false
+	if claims != nil {
+		log.Println(claims)
+		isAdmin = claims.(jwt.MapClaims)["isAdmin"].(bool)
+	}
+
+
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid post ID")
 		return
@@ -175,6 +184,11 @@ func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
 	bp := BlogPost{}
 	if err := bp.getBlogPost(a.DB, uint(requestedId)); err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if !bp.IsPublished && !isAdmin {
+		respondWithError(w, http.StatusUnauthorized, "Unable to get Blog Post")
 		return
 	}
 
@@ -191,14 +205,12 @@ func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
 		isAdmin = claims.(jwt.MapClaims)["isAdmin"].(bool)
 	}
 
-	var blogPosts[] BlogPost
+	blogPosts := []BlogPost{}
 
 	if isAdmin {
 		blogPosts = getAllBlogPosts(a.DB)
-		log.Println("IS ADMIN")
 	} else {
 		blogPosts = getPublishedBlogPosts(a.DB)
-		log.Println("NOT ADMIN")
 	}
 
 	respondWithJSON(w, http.StatusOK, blogPosts)

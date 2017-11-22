@@ -99,7 +99,7 @@ func (a *App) initializeAuthRoutes() {
 	authRouter := a.Router.PathPrefix("/auth").Subrouter()
 
 	authRouter.HandleFunc("/jwt/request", a.authenticate)
-	authRouter.HandleFunc("/jwt/validate", a.loginRequired(a.authTest))
+	authRouter.HandleFunc("/jwt/validate", a.authTest)
 
 }
 

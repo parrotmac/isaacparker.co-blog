@@ -94,5 +94,21 @@ func (a *App) loginRequired(next func(w http.ResponseWriter, r *http.Request)) h
 }
 
 func (a *App) authTest(w http.ResponseWriter, r *http.Request) {
+
+	authHeader := r.Header.Get("Authorization")
+
+	if authHeader == "" {
+		respondWithError(w, http.StatusUnauthorized, "Missing Authorization Header")
+		return
+	}
+
+	clientToken := strings.Replace(authHeader, "Bearer ", "", 1)
+	_, err := a.verifyToken(clientToken) // _ is claims
+
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "Unable to verify JWT")
+		return
+	}
+
 	respondWithJSON(w, http.StatusOK, struct{Status string `json:"status"`}{Status: "success"})
 }
