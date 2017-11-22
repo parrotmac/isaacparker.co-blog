@@ -1,9 +1,13 @@
 package main
 
-import jwt "github.com/dgrijalva/jwt-go"
+import (
+	jwt "github.com/dgrijalva/jwt-go"
+	"net/http"
+	"strings"
+)
 
-func getToken(user *User) (string, error) {
-	signingKey := []byte("keymaker")
+func (a *App) getToken(user *User) (string, error) {
+	signingKey := a.jwtKey
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": user.ID,
 		"firstName": user.FirstName,
@@ -13,8 +17,8 @@ func getToken(user *User) (string, error) {
 	return tokenString, err
 }
 
-func verifyToken(tokenString string) (jwt.Claims, error) {
-	signingKey := []byte("keymaker")
+func (a *App) verifyToken(tokenString string) (jwt.Claims, error) {
+	signingKey := a.jwtKey
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return signingKey, nil
 	})
@@ -22,4 +26,17 @@ func verifyToken(tokenString string) (jwt.Claims, error) {
 		return nil, err
 	}
 	return token.Claims, err
+}
+
+func (a *App) getClaims(r *http.Request) jwt.Claims {
+
+	authHeader := r.Header.Get("Authorization")
+
+	clientToken := strings.Replace(authHeader, "Bearer ", "", 1)
+	claims, err := a.verifyToken(clientToken)
+	if err != nil {
+		return nil
+	}
+
+	return claims
 }

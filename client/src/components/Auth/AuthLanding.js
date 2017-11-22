@@ -7,18 +7,28 @@ import {inject, observer} from "mobx-react";
 @inject("authStore") @observer
 class AuthLanding extends Component {
     render() {
-        return (
-            <div>
-                <div className={'col-sm-4 col-sm-offset-2 AuthLanding-Split'}>
-                    <h3>Login</h3>
-                    <LoginForm/>
+        if(this.props.authStore.userIsSignedIn) {
+            return (
+                <div>
+                    <div className={'col-sm-4 col-sm-offset-4'}>
+                        <h2>Welcome, human</h2>
+                    </div>
                 </div>
-                <div className={'col-sm-4 AuthLanding-Split'}>
-                    <h3>Register</h3>
-                    <RegisterForm/>
+            )
+        } else {
+            return (
+                <div>
+                    <div className={'col-sm-4 col-sm-offset-2 AuthLanding-Split'}>
+                        <h3>Login</h3>
+                        <LoginForm/>
+                    </div>
+                    <div className={'col-sm-4 AuthLanding-Split'}>
+                        <h3>Register</h3>
+                        <RegisterForm/>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 }
 

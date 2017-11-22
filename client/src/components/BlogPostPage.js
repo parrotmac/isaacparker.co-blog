@@ -7,6 +7,7 @@ import EditorPane from "./EditorPane";
 import HorizontalRule from "./HorizontalRule";
 import {Link, Redirect} from "react-router-dom";
 import ModestCommentsSection from "./ModestCommentsSection";
+import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
 
 @inject("blogPostStore") @observer
 class BlogPostPage extends Component {
@@ -19,29 +20,32 @@ class BlogPostPage extends Component {
         this.onTitleChanged = this.onTitleChanged.bind(this);
         this.onEditorChangedValue = this.onEditorChangedValue.bind(this);
 
-
         const {blogPostId} = this.props.match.params;
         const {blogPosts} = this.props.blogPostStore;
         this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
 
         this.state = {
             blogPostId: blogPostId,
-            wasDeleted: false
+            wasDeleted: false,
+            isUpdating: false
         };
-
 
     }
 
     componentWillReact() {
-
         const {blogPostId} = this.props.match.params;
-        const {blogPosts} = this.props.blogPostStore;
+        const {blogPosts, isUpdating} = this.props.blogPostStore;
+
+        this.setState({
+            isUpdating: isUpdating
+        });
+
         this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
     }
 
 
     deleteClicked(event) {
-        if(window.confirm("Delete this 4 realz?")) {
+        if(window.confirm("Are you sure you want to delete this resource?")) {
             this.props.blogPostStore.deleteBlogPost(this.currentBlogPost).then(
                 didDelete => {
                     // Setting `wasDeleted` to result of call. This way we can redirect to the main page after deletion
@@ -66,7 +70,7 @@ class BlogPostPage extends Component {
     }
 
     render() {
-        const {isLoading, loadFailed} = this.props.blogPostStore;
+        const {status} = this.props.blogPostStore;
 
         if(this.state.wasDeleted) {
             return (
@@ -74,25 +78,29 @@ class BlogPostPage extends Component {
             )
         }
 
-        if(isLoading) {
+        if(status === BLOG_POST_REQUEST_STATES.REQUESTING) {
             return <small>Loading...</small>
+        }
+
+        const isUpdating = status === BLOG_POST_REQUEST_STATES.UPDATING;
+        let updateButtonText = "Update";
+        if(isUpdating) {
+            updateButtonText = "Updating...";
         }
 
         const toolbarItems = {
             deletePost: <button onClick={this.deleteClicked} className={'btn btn-danger'}>
                 Delete <span className={'glyphicon glyphicon-trash'}/>
             </button>,
-            updatePost: <button onClick={this.updateClicked} className={'btn btn-primary'}>
-                Update <span className={'glyphicon glyphicon-upload'}/>
+            updatePost: <button disabled={isUpdating} onClick={this.updateClicked} className={'btn btn-primary'}>
+                {updateButtonText} <span className={'glyphicon glyphicon-upload'}/>
             </button>,
-
             newPost: <Link className={'btn btn-primary'} to={'/blog/new'}>
                 New <span className={'glyphicon glyphicon-plus'}/>
             </Link>
         };
 
-
-        if(loadFailed) {
+        if(status === BLOG_POST_REQUEST_STATES.FAILURE) {
             return (
                 <div>
                     <Toolbar>
@@ -103,7 +111,6 @@ class BlogPostPage extends Component {
                 </div>
             )
         }
-
 
         if(typeof this.currentBlogPost === 'undefined') {
             return (
@@ -116,7 +123,6 @@ class BlogPostPage extends Component {
             )
         }
 
-
         return (
             <div>
                 <AdminOnly>
@@ -127,7 +133,10 @@ class BlogPostPage extends Component {
                     </Toolbar>
                     <details style={{backgroundColor: "#C0C0C0"}}>
                         <summary style={{padding: 10}}>Edit Blog Post</summary>
-                        <input type={'text'} size={'40'} value={this.currentBlogPost.title} onChange={this.onTitleChanged} />
+                        <div className="form-group">
+                            <label>Title</label>
+                            <input className="form-control" type={'text'} value={this.currentBlogPost.title} onChange={this.onTitleChanged} />
+                        </div>
                         <label>Published:
                             <input type={'checkbox'} checked={this.currentBlogPost.isPublished} onChange={event => this.currentBlogPost.isPublished = event.target.checked}/>
                         </label>

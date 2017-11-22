@@ -163,7 +163,7 @@ func (a *App) deletePost(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (a *App) getPost(w http.ResponseWriter, r *http.Request, claims jwt.Claims) {
+func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
 	requestVars := mux.Vars(r)
 	requestedId, err := strconv.ParseUint(requestVars["id"], 10, 32)
 
@@ -181,7 +181,9 @@ func (a *App) getPost(w http.ResponseWriter, r *http.Request, claims jwt.Claims)
 	respondWithJSON(w, http.StatusOK, bp)
 }
 
-func (a *App) getPosts(w http.ResponseWriter, r *http.Request, claims jwt.Claims) {
+func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
+
+	claims := a.getClaims(r)
 
 	isAdmin := false
 	if claims != nil {

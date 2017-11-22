@@ -57,6 +57,9 @@ export const BLOG_POST_REQUEST_STATES = {
     INITIAL: "INITIAL",
     REQUESTING: "REQUESTING",
     SUCCESS: "SUCCESS",
+    UPDATING: "UPDATING",
+    DELETING: "DELETING",
+    DELETED: "DELETED",
     FAILURE: "FAILURE"
 };
 
@@ -64,8 +67,7 @@ class BlogPostStore {
 
     apiHelper;
     @observable blogPosts = [];
-    @observable isLoading = true;
-    @observable loadFailed = false;
+    @observable status = BLOG_POST_REQUEST_STATES.INITIAL;
     @observable errorText = null;
 
     constructor(apiHelper, userStore, authenticationStore) {
@@ -79,44 +81,54 @@ class BlogPostStore {
      * Fetches all blog posts from the server
      */
     loadBlogPosts() {
-        this.isLoading = true;
+        this.status = BLOG_POST_REQUEST_STATES.REQUESTING;
         this.apiHelper.getItemsListing(this.authenticationStore.jsonWebToken).then(fetchedBlogPosts => {
             this.blogPosts = fetchedBlogPosts;
-            this.isLoading = false;
-            this.loadFailed = false;
+            // TODO: Switch to status types rather than booleans
+            this.status = BLOG_POST_REQUEST_STATES.SUCCESS;
         }).catch(err => {
-            this.loadFailed = true;
+            this.status = BLOG_POST_REQUEST_STATES.FAILURE;
         })
     }
 
     saveBlogPost(blogPostJson) {
+        this.status = BLOG_POST_REQUEST_STATES.UPDATING;
         if('ID' in blogPostJson) {
-            this.apiHelper.saveItem(blogPostJson.ID, blogPostJson, this.authenticationStore.jsonWebToken)
+            return this.apiHelper.saveItem(blogPostJson.ID, blogPostJson, this.authenticationStore.jsonWebToken).then(
+                res => {
+                    this.status = BLOG_POST_REQUEST_STATES.SUCCESS;
+                }
+            ).catch( err => {
+                this.status = BLOG_POST_REQUEST_STATES.FAILURE;
+            })
         } else {
             return this.apiHelper.addItem(blogPostJson, this.authenticationStore.jsonWebToken).then(
                 newBlogPost => {
                     const newPostIndex = this.blogPosts.indexOf(bp => bp.ID === newBlogPost.ID);
                     if (newPostIndex < 0) {
                         this.blogPosts.push(newBlogPost);
+                        this.status = BLOG_POST_REQUEST_STATES.SUCCESS;
                         return newBlogPost
                     }
                 }
-            )
+            ).catch( err => {
+                this.status = BLOG_POST_REQUEST_STATES.FAILURE;
+                this.errorText = err;
+            })
         }
     }
 
     deleteBlogPost(blogPost) {
-        this.isLoading = true;
+        this.status = BLOG_POST_REQUEST_STATES.DELETING;
         return this.apiHelper.deleteItem(blogPost.ID, this.authenticationStore.jsonWebToken).then(
             didDelete => {
                 this.blogPosts.splice(this.blogPosts.indexOf(blogPost), 1);
-                this.isLoading = false;
+                this.status = BLOG_POST_REQUEST_STATES.DELETED;
                 return didDelete
             }
         ).catch(
             err => {
-                this.isLoading = false;
-                this.loadFailed = true;
+                this.status = BLOG_POST_REQUEST_STATES.FAILURE;
                 this.errorText = err;
             }
         )
