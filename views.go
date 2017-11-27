@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/dchest/uniuri"
 	"log"
+	"os"
+	"io"
 )
 
 func (a *App) createUser(w http.ResponseWriter, r *http.Request) {
@@ -214,4 +217,33 @@ func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, blogPosts)
+}
+
+func (a *App) uploadMediaFile(w http.ResponseWriter, r *http.Request) {
+
+	// TODO: un-hard-code './media/' and use the mediaUrlPrefix as defined in the static handler function
+	// Prefix _MUST_ have a leading slash or the save function will put file into a hidden directory
+	uploadPathPrefix := "/media/"
+
+	file, handler, err := r.FormFile("file")
+	defer file.Close()
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Unable to accept upload. Details: " + err.Error())
+		return
+	}
+
+	uploadFilename := handler.Filename
+	filenamePrefix := ""
+
+	if _, err := os.Stat("." + uploadPathPrefix + filenamePrefix + uploadFilename); !os.IsNotExist(err) {
+		filenamePrefix = uniuri.New() + "_"
+	}
+
+	fullPath := uploadPathPrefix + filenamePrefix + uploadFilename
+
+	f, err := os.OpenFile("." + fullPath, os.O_WRONLY|os.O_CREATE, 0666)
+	defer f.Close()
+	io.Copy(f, file)
+
+	respondWithJSON(w, http.StatusAccepted, map[string]string{"url": fullPath})
 }

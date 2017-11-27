@@ -87,6 +87,11 @@ func (a *App) initializeFrontendRoutes() {
 	staticFileServer := http.FileServer(http.Dir(clientDirectoryPath))
 	a.Router.PathPrefix(staticUrlPrefix).Handler(http.StripPrefix(staticUrlPrefix, staticFileServer))
 
+	mediaUrlPrefix := "/media/"
+	mediaDirectoryPath := "./media/"
+	mediaFileServer := http.FileServer(http.Dir(mediaDirectoryPath))
+	a.Router.PathPrefix(mediaUrlPrefix).Handler(http.StripPrefix(mediaUrlPrefix, mediaFileServer))
+
 	indexHandler := func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "client/build/")
 	}
@@ -120,5 +125,11 @@ func (a *App) initializeApiRoutes() {
 	postsRouter.HandleFunc("/{id:[0-9]+}", a.getPost).Methods("GET")
 	postsRouter.HandleFunc("/{id:[0-9]+}", a.loginRequired(a.updatePost)).Methods("PATCH")
 	postsRouter.HandleFunc("/{id:[0-9]+}", a.loginRequired(a.deletePost)).Methods("DELETE")
+
+
+	mediaRouter := a.APIRouter.PathPrefix("/media").Subrouter()
+
+	mediaRouter.HandleFunc("/upload", a.loginRequired(a.uploadMediaFile)).Methods("POST")
+	//mediaRouter.HandleFunc("{filename:[.]+}", a.loginRequired(//)).Methods("DELETE") FIXME
 
 }

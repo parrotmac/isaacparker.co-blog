@@ -3,6 +3,8 @@
 
 .idea/
 
+media/
+
 # post-processed/compiled css
 client/src/components/styles/*.css
 client/src/styles/*.css
