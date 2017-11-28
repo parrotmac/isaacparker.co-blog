@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"io"
+	"io/ioutil"
 )
 
 func (a *App) createUser(w http.ResponseWriter, r *http.Request) {
@@ -246,4 +247,47 @@ func (a *App) uploadMediaFile(w http.ResponseWriter, r *http.Request) {
 	io.Copy(f, file)
 
 	respondWithJSON(w, http.StatusAccepted, map[string]string{"url": fullPath})
+}
+
+func (a *App) deleteMediaFile(w http.ResponseWriter, r *http.Request) {
+	requestVars := mux.Vars(r)
+	deadFilename := requestVars["filename"]
+
+	uploadPathPrefix := "/media/"
+
+	if _, err := os.Stat("." + uploadPathPrefix + deadFilename); os.IsNotExist(err) {
+		respondWithError(w, http.StatusNotFound, "Specified file does not exist: " + err.Error())
+		return
+	}
+
+	err := os.Remove("." + uploadPathPrefix + deadFilename)
+
+	if err != nil {
+		respondWithError(w, http.StatusNotFound, "Unable to remove file: " + err.Error())
+		return
+	}
+
+	respondWithStatus(w, http.StatusAccepted, "success")
+}
+
+func (a *App) getUploadListing(w http.ResponseWriter, r *http.Request) {
+	files, err := ioutil.ReadDir("./media/")
+
+	type MediaFile struct {
+		Name string `json:"name"`
+		Url string `json:"url"`
+	}
+
+	var allFiles []MediaFile
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	for _, f := range files {
+		allFiles = append(allFiles, MediaFile{Name: f.Name(), Url: "/media/" + f.Name()})
+	}
+
+	respondWithJSON(w, http.StatusOK, allFiles)
 }

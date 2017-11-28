@@ -130,6 +130,7 @@ func (a *App) initializeApiRoutes() {
 	mediaRouter := a.APIRouter.PathPrefix("/media").Subrouter()
 
 	mediaRouter.HandleFunc("/upload", a.loginRequired(a.uploadMediaFile)).Methods("POST")
-	//mediaRouter.HandleFunc("{filename:[.]+}", a.loginRequired(//)).Methods("DELETE") FIXME
+	mediaRouter.HandleFunc("/", a.loginRequired(a.getUploadListing)).Methods("GET")
+	mediaRouter.HandleFunc("/{filename:.+}", a.loginRequired(a.deleteMediaFile)).Methods("DELETE")
 
 }
