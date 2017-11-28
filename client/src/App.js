@@ -17,6 +17,7 @@ import AuthLanding from "./components/Auth/AuthLanding";
 import AdminPage from "./components/AdminPage";
 import BlogPostPage from "./components/BlogPostPage";
 import AuthInitializer from "./components/AuthInitializer";
+import PageNotFound from "./components/PageNotFound";
 
 class RedirectToBlog extends Component {
     render() {
@@ -38,25 +39,29 @@ class App extends Component {
                         </div>
                         <div className={'row'}>
                             <Main>
-                                <Route exact path="/" component={RedirectToBlog}/>
-
                                 <Switch>
+                                    <Route exact path="/" component={RedirectToBlog}/>
+
+                                    {/*<Switch>*/}
                                     <Route exact path="/blog" component={Blog}/>
                                     <Route exact path="/blog/new" component={NewBlogPost}/>
                                     <Route path="/blog/:blogPostId" component={BlogPostPage} />
+                                    {/*</Switch>*/}
+
+                                    <Route path="/portfolio" component={Portfolio}/>
+
+                                    <Route path={`/portfolio/:projectSlug`} component={PortfolioExpose}/>
+
+                                    <Route exact path="/social" component={Social}/>
+
+                                    <Route exact path="/contact" component={Contact}/>
+
+                                    <Route exact path="/account" component={AuthLanding}/>
+
+                                    <Route exact path="/admin" component={AdminPage}/>
+
+                                    <Route component={PageNotFound} />
                                 </Switch>
-
-                                <Route path="/portfolio" component={Portfolio}/>
-
-                                <Route path={`/portfolio/:projectSlug`} component={PortfolioExpose}/>
-
-                                <Route exact path="/social" component={Social}/>
-
-                                <Route exact path="/contact" component={Contact}/>
-
-                                <Route exact path="/account" component={AuthLanding}/>
-
-                                <Route exact path="/admin" component={AdminPage}/>
                             </Main>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ import HorizontalRule from "./HorizontalRule";
 import {Link, Redirect} from "react-router-dom";
 import ModestCommentsSection from "./ModestCommentsSection";
 import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
+import FileUploader from "../containers/FileUploader";
 
 @inject("blogPostStore") @observer
 class BlogPostPage extends Component {
@@ -97,7 +98,7 @@ class BlogPostPage extends Component {
             </button>,
             newPost: <Link className={'btn btn-primary'} to={'/blog/new'}>
                 New <span className={'glyphicon glyphicon-plus'}/>
-            </Link>
+            </Link>,
         };
 
         if(status === BLOG_POST_REQUEST_STATES.FAILURE) {
@@ -130,6 +131,9 @@ class BlogPostPage extends Component {
                         {toolbarItems.deletePost}
                         {toolbarItems.updatePost}
                         {toolbarItems.newPost}
+                    </Toolbar>
+                    <Toolbar>
+                        <FileUploader />
                     </Toolbar>
                     <details style={{backgroundColor: "#C0C0C0"}}>
                         <summary style={{padding: 10}}>Edit Blog Post</summary>

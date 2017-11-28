@@ -1,14 +1,36 @@
-class APIHelper {
+class FileUploadHelper {
     constructor(apiUrlBase) {
         this.apiUrlBase = apiUrlBase;
     }
 
     REQUEST_TYPES = {
-        GET: 'GET',
         POST: 'POST',
-        PATCH: 'PATCH',
         DELETE: 'DELETE'
     };
+
+    sendUploadRequest(url, authToken, uploadForm, filename) {
+        const uploadRequest = new Request(
+            url,
+            {
+                method: 'POST',
+                credentials: 'include',
+                body: uploadForm
+            }
+        );
+
+        uploadRequest.headers.append('Accept', 'application/json');
+        uploadRequest.headers.append('Content-Disposition', `attachment; filename=${filename}`);
+
+        if(typeof authToken !== 'undefined') {
+            uploadRequest.headers.append("Authorization", `Bearer ${authToken}`);
+        }
+
+        return fetch(
+            uploadRequest
+        ).then(
+            res => res.json()
+        )
+    }
 
     sendFetchRequest(url, authToken, method=this.REQUEST_TYPES.GET, body) {
 
@@ -43,26 +65,14 @@ class APIHelper {
         )
     }
 
-    getItem(id, authToken) {
-        return this.sendFetchRequest(`${this.apiUrlBase}/${id}`, authToken)
+    uploadFile(uploadForm, filename, authToken) {
+        return this.sendUploadRequest(`${this.apiUrlBase}/upload`, authToken, uploadForm, filename)
     }
 
-    addItem(payload, authToken) {
-        return this.sendFetchRequest(this.apiUrlBase, authToken, this.REQUEST_TYPES.POST, payload)
-    }
-
-    saveItem(id, payload, authToken) {
-        return this.sendFetchRequest(`${this.apiUrlBase}/${id}`, authToken, this.REQUEST_TYPES.PATCH, payload)
-    }
-
-    deleteItem(id, authToken) {
-        return this.sendFetchRequest(`${this.apiUrlBase}/${id}`, authToken, this.REQUEST_TYPES.DELETE)
-    }
-
-    getItemsListing(authToken) {
-        return this.sendFetchRequest(this.apiUrlBase, authToken)
+    deleteFile(filename, authToken) {
+        return this.sendFetchRequest(`${this.apiUrlBase}/${filename}`, authToken, this.REQUEST_TYPES.DELETE)
     }
 
 }
 
-export default APIHelper
+export default FileUploadHelper

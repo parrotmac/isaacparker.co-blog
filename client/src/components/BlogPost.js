@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import "./styles/BlogPost.css"
 import {Link} from "react-router-dom";
+import AdminOnly from "./Admin/AdminOnly";
 
 class BlogPost extends Component {
     componentDidMount() {
@@ -12,7 +13,7 @@ class BlogPost extends Component {
     }
 
     render() {
-        const {ID, title, CreatedAt} = this.props.blogPost;
+        const {ID, title, CreatedAt, IsPublished} = this.props.blogPost;
         const {titleLink} = this.props;
         const createdDT = new Date(Date.parse(CreatedAt));
         const now = new Date();
@@ -32,6 +33,9 @@ class BlogPost extends Component {
                 <p className={'BlogPost-Meta'}>
                     {/*<i className="material-icons">person</i>*/}
                     {/*<span className={"BlogPost-LabelText"}> {user.firstName}</span>*/}
+                    <AdminOnly>
+                    {!IsPublished && <small>(Unpublished)</small>}
+                    </AdminOnly>
                     <i className="material-icons">access_time</i>
                     <span className={"BlogPost-LabelText"}>{prettyCreatedAtString}</span>
                 </p>
