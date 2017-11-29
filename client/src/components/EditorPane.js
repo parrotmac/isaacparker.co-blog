@@ -24,6 +24,13 @@ class EditorPane extends Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        const {initialValue} = nextProps;
+        this.setState({
+            value: RichTextEditor.createValueFromString(initialValue, 'html')
+        })
+    }
+
     onChange = (value) => {
         this.setState({value});
         if (this.props.onChange) {

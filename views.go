@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dchest/uniuri"
-	"log"
 	"os"
 	"io"
 	"io/ioutil"
@@ -72,11 +71,6 @@ func (a *App) getUser(w http.ResponseWriter, r *http.Request) {
 
 func (a *App) getUsers(w http.ResponseWriter, r *http.Request) {
 	users := getUserListing(a.DB)
-	//if err != nil {
-	//	respondWithError(w, http.StatusInternalServerError, err.Error())
-	//	return
-	//}
-
 	respondWithJSON(w, http.StatusOK, users)
 }
 
@@ -175,7 +169,6 @@ func (a *App) getPost(w http.ResponseWriter, r *http.Request) {
 
 	isAdmin := false
 	if claims != nil {
-		log.Println(claims)
 		isAdmin = claims.(jwt.MapClaims)["isAdmin"].(bool)
 	}
 
@@ -205,7 +198,6 @@ func (a *App) getPosts(w http.ResponseWriter, r *http.Request) {
 
 	isAdmin := false
 	if claims != nil {
-		log.Println(claims)
 		isAdmin = claims.(jwt.MapClaims)["isAdmin"].(bool)
 	}
 

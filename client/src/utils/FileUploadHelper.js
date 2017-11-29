@@ -4,6 +4,7 @@ class FileUploadHelper {
     }
 
     REQUEST_TYPES = {
+        GET: 'GET',
         POST: 'POST',
         DELETE: 'DELETE'
     };
@@ -71,6 +72,10 @@ class FileUploadHelper {
 
     deleteFile(filename, authToken) {
         return this.sendFetchRequest(`${this.apiUrlBase}/${filename}`, authToken, this.REQUEST_TYPES.DELETE)
+    }
+
+    getFiles(authToken) {
+        return this.sendFetchRequest(this.apiUrlBase, authToken)
     }
 
 }

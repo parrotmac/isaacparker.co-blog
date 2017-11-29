@@ -9,6 +9,7 @@ import {Link, Redirect} from "react-router-dom";
 import ModestCommentsSection from "./ModestCommentsSection";
 import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
 import FileUploader from "../containers/FileUploader";
+import CodeEditor from "./CodeEditor";
 
 @inject("blogPostStore") @observer
 class BlogPostPage extends Component {
@@ -28,7 +29,8 @@ class BlogPostPage extends Component {
         this.state = {
             blogPostId: blogPostId,
             wasDeleted: false,
-            isUpdating: false
+            isUpdating: false,
+            blogPostBody: null
         };
 
     }
@@ -37,11 +39,14 @@ class BlogPostPage extends Component {
         const {blogPostId} = this.props.match.params;
         const {blogPosts, isUpdating} = this.props.blogPostStore;
 
+        this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
+
         this.setState({
-            isUpdating: isUpdating
+            isUpdating: isUpdating,
+            blogPostBody: this.currentBlogPost.body
         });
 
-        this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
+
     }
 
 
@@ -63,7 +68,13 @@ class BlogPostPage extends Component {
     }
 
     onEditorChangedValue(newValue) {
-        this.currentBlogPost.body = newValue;
+        // this.currentBlogPost.body = newValue;
+
+        this.setState({
+            blogPostBody: newValue
+        }, () => {
+            this.currentBlogPost.body = this.state.blogPostBody
+        });
     }
 
     onTitleChanged(event) {
@@ -144,7 +155,11 @@ class BlogPostPage extends Component {
                         <label>Published:
                             <input type={'checkbox'} checked={this.currentBlogPost.isPublished} onChange={event => this.currentBlogPost.isPublished = event.target.checked}/>
                         </label>
-                        <EditorPane onChange={this.onEditorChangedValue} initialValue={this.currentBlogPost.body}/>
+                        <EditorPane onChange={this.onEditorChangedValue} initialValue={this.state.blogPostBody}/>
+                    </details>
+                    <details style={{backgroundColor: "#C0C0C0"}}>
+                        <summary style={{padding: 10}}>Edit Blog Post Markup</summary>
+                        <CodeEditor onChange={this.onEditorChangedValue} initialValue={this.state.blogPostBody}/>
                     </details>
                     <HorizontalRule vMargin={20} hMargin={50} />
                 </AdminOnly>
