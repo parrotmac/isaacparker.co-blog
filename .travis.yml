@@ -14,5 +14,5 @@ jobs:
       - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
       - docker build -t ipco .
       - docker images
-      - docker tag hspc-django $DOCKER_USERNAME/ipco
+      - docker tag ipco $DOCKER_USERNAME/ipco
       - docker push $DOCKER_USERNAME/ipco
