@@ -23,6 +23,11 @@ class CodeEditor extends Component {
 
     render() {
         const {initialValue, onChange} = this.props;
+
+        if (typeof initialValue === 'undefined') {
+            return null
+        }
+
         return (
             <AceEditor
                 mode="html"

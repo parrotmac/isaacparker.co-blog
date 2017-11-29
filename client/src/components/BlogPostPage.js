@@ -30,9 +30,8 @@ class BlogPostPage extends Component {
             blogPostId: blogPostId,
             wasDeleted: false,
             isUpdating: false,
-            blogPostBody: null
+            blogPostBody: ""
         };
-
     }
 
     componentWillReact() {
@@ -45,8 +44,6 @@ class BlogPostPage extends Component {
             isUpdating: isUpdating,
             blogPostBody: this.currentBlogPost.body
         });
-
-
     }
 
 
