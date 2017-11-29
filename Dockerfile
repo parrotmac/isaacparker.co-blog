@@ -9,11 +9,11 @@ ADD client/package-lock.json /usr/src/app/
 RUN npm install
 
 ADD client/ /usr/src/app
+
+RUN npm run build-css
 RUN npm run build
 
-
 FROM golang:alpine
-
 EXPOSE 8000
 
 RUN apk update && apk add git
