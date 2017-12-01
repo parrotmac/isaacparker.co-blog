@@ -1,15 +1,14 @@
 import React, {Component} from 'react'
-import BlogPost from "./BlogPost";
 import {inject, observer} from "mobx-react";
 import AdminOnly from "./Admin/AdminOnly";
 import Toolbar from "./Admin/Toolbar";
-import EditorPane from "./EditorPane";
 import HorizontalRule from "./HorizontalRule";
 import {Link, Redirect} from "react-router-dom";
 import ModestCommentsSection from "./ModestCommentsSection";
 import {BLOG_POST_REQUEST_STATES} from "../stores/BlogPost";
 import FileUploader from "../containers/FileUploader";
-import CodeEditor from "./CodeEditor";
+import RichTextEditor from "./RichTextEditor";
+import BlogPost from "./BlogPost";
 
 @inject("blogPostStore") @observer
 class BlogPostPage extends Component {
@@ -24,15 +23,24 @@ class BlogPostPage extends Component {
 
         const {blogPostId} = this.props.match.params;
         const {blogPosts} = this.props.blogPostStore;
-        this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
+
+        let shouldCreateNewPost = false;
+        const {path} = this.props.match;
+        if (path === "/blog/new") { // TODO: Determine if there's a more elegant solution
+            // Should create a new blog post
+            shouldCreateNewPost = true;
+        } else {
+            this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
+        }
+
 
         this.state = {
             blogPostId: blogPostId,
             wasDeleted: false,
-            isUpdating: false,
-            blogPostBody: ""
+            isUpdating: false
         };
     }
+
 
     componentWillReact() {
         const {blogPostId} = this.props.match.params;
@@ -40,10 +48,11 @@ class BlogPostPage extends Component {
 
         this.currentBlogPost = blogPosts.find(blogPost => blogPost.ID === parseInt(blogPostId, 10));
 
-        this.setState({
+        const newState = {
             isUpdating: isUpdating,
-            blogPostBody: this.currentBlogPost.body
-        });
+        };
+
+        this.setState(newState);
     }
 
 
@@ -65,13 +74,7 @@ class BlogPostPage extends Component {
     }
 
     onEditorChangedValue(newValue) {
-        // this.currentBlogPost.body = newValue;
-
-        this.setState({
-            blogPostBody: newValue
-        }, () => {
-            this.currentBlogPost.body = this.state.blogPostBody
-        });
+        this.currentBlogPost.body = newValue;
     }
 
     onTitleChanged(event) {
@@ -112,21 +115,28 @@ class BlogPostPage extends Component {
         if(status === BLOG_POST_REQUEST_STATES.FAILURE) {
             return (
                 <div>
-                    <Toolbar>
-                    {toolbarItems.deletePost}
-                    {toolbarItems.newPost}
-                    </Toolbar>
+                    <AdminOnly>
+                        <Toolbar>
+                            {toolbarItems.deletePost}
+                            {toolbarItems.newPost}
+                        </Toolbar>
+                    </AdminOnly>
                     <small>There was an issue loading this blog post.</small>
                 </div>
             )
         }
 
         if(typeof this.currentBlogPost === 'undefined') {
+
+            // this.currentBlogPost = this.props.blogPostStore.createBlogPost();
+
             return (
                 <div>
-                    <Toolbar>
-                        {toolbarItems.newPost}
-                    </Toolbar>
+                    <AdminOnly>
+                        <Toolbar>
+                            {toolbarItems.newPost}
+                        </Toolbar>
+                    </AdminOnly>
                     <small>This post doesn't seem to exist!</small>
                 </div>
             )
@@ -152,11 +162,7 @@ class BlogPostPage extends Component {
                         <label>Published:
                             <input type={'checkbox'} checked={this.currentBlogPost.isPublished} onChange={event => this.currentBlogPost.isPublished = event.target.checked}/>
                         </label>
-                        <EditorPane onChange={this.onEditorChangedValue} initialValue={this.state.blogPostBody}/>
-                    </details>
-                    <details style={{backgroundColor: "#C0C0C0"}}>
-                        <summary style={{padding: 10}}>Edit Blog Post Markup</summary>
-                        <CodeEditor onChange={this.onEditorChangedValue} initialValue={this.state.blogPostBody}/>
+                        <RichTextEditor onChange={this.onEditorChangedValue} value={this.currentBlogPost.body} />
                     </details>
                     <HorizontalRule vMargin={20} hMargin={50} />
                 </AdminOnly>
