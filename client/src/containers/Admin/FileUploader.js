@@ -55,7 +55,9 @@ class FileUploader extends Component {
                     allFiles: res
                 })
             }
-        )
+        ).catch( err => {
+            console.error(err)
+        })
     }
 
     onFileChanged(event) {
