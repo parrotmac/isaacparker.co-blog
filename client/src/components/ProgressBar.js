@@ -4,7 +4,7 @@ class ProgressBar extends Component {
     render() {
         const {progress, outOf=100} = this.props;
 
-        const normalizedProgress = parseInt( progress / outOf * 100 );
+        const normalizedProgress = parseInt( progress / outOf * 100, 10 );
 
         return (
             <div className="progress">

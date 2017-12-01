@@ -3,19 +3,21 @@ import React, {Component} from 'react'
 class FileList extends Component {
     render() {
 
+        let fileKeyId = 0;
+
         return (
 
             <ul style={{listStyleType: "none", padding: 0}}>
                 {this.props.files.map(
                     file =>
-                        <li style={{margin: '5px 0'}}>
+                        <li key={`${file.name}-file-${fileKeyId++}`} style={{margin: '15px 0'}}>
                             <p><strong>Name:</strong> {file.name}</p>
-                            <p>
+                            <div>
                                 <strong>URL:</strong>
-                                <a href={file.url} target={'_blank'}>
-                                    <pre style={{display: 'inline'}}>{file.url}</pre>
+                                <a href={window.encodeURI(file.url)} target={'_blank'}>
+                                    <pre style={{display: 'inline'}}>{window.encodeURI(file.url)}</pre>
                                 </a>
-                            </p>
+                            </div>
                         </li>)
                 }
             </ul>

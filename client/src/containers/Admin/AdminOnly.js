@@ -4,14 +4,12 @@ import {inject, observer} from "mobx-react";
 @inject("authStore") @observer
 class AdminOnly extends Component {
     render() {
+        const isAdmin = this.props.authStore.isAdminUser;
 
-        // TODO: Check for JWT claims
-        const {jsonWebToken} = this.props.authStore;
-
-        if(jsonWebToken === null) {
-            return null
+        if(isAdmin) {
+            return this.props.children
         }
-        return this.props.children
+        return null
     }
 }
 

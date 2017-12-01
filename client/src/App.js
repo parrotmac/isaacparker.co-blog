@@ -9,15 +9,14 @@ import {
 import Portfolio from "./components/Portfolio";
 import Social from "./components/Social";
 import Contact from "./components/Contact";
-import NewBlogPost from "./components/NewBlogPost";
 import Main from "./components/Main";
 import Footer from "./components/Footer";
 import PortfolioExpose from "./components/PortfolioExpose";
 import AuthLanding from "./components/Auth/AuthLanding";
-import AdminPage from "./components/AdminPage";
-import BlogPostPage from "./components/BlogPostPage";
 import AuthInitializer from "./components/AuthInitializer";
 import PageNotFound from "./components/PageNotFound";
+import BlogPostDetail from "./containers/Admin/BlogPostDetail";
+import BlogPostCreator from "./containers/Admin/BlogPostCreator";
 
 class RedirectToBlog extends Component {
     render() {
@@ -42,11 +41,9 @@ class App extends Component {
                                 <Switch>
                                     <Route exact path="/" component={RedirectToBlog}/>
 
-                                    {/*<Switch>*/}
                                     <Route exact path="/blog" component={Blog}/>
-                                    <Route exact path="/blog/new" component={NewBlogPost}/>
-                                    <Route path="/blog/:blogPostId" component={BlogPostPage} />
-                                    {/*</Switch>*/}
+                                    <Route exact path="/blog/new" component={BlogPostCreator}/>
+                                    <Route path="/blog/:blogPostId" component={BlogPostDetail} />
 
                                     <Route path="/portfolio" component={Portfolio}/>
 
@@ -57,8 +54,6 @@ class App extends Component {
                                     <Route exact path="/contact" component={Contact}/>
 
                                     <Route exact path="/account" component={AuthLanding}/>
-
-                                    <Route exact path="/admin" component={AdminPage}/>
 
                                     <Route component={PageNotFound} />
                                 </Switch>

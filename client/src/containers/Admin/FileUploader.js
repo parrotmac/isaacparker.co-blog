@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import FileUploadHelper from '../utils/FileUploadHelper';
+import FileUploadHelper from '../../utils/FileUploadHelper';
 import {inject, observer} from "mobx-react";
-import FileList from "../components/FileList";
-import ProgressBar from "../components/ProgressBar";
+import FileList from "../../components/FileList";
+import ProgressBar from "../../components/ProgressBar";
 
 @inject ("authStore") @observer
 class FileUploader extends Component {
@@ -51,7 +51,6 @@ class FileUploader extends Component {
             this.props.authStore.jsonWebToken
         ).then(
             res => {
-                console.log(res);
                 this.setState({
                     allFiles: res
                 })
