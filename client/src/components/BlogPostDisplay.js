@@ -1,9 +1,15 @@
 import React, {Component} from 'react'
 import "./styles/BlogPost.css"
 import {Link} from "react-router-dom";
-import AdminOnly from "./Admin/AdminOnly";
+import AdminOnly from "../containers/Admin/AdminOnly";
+import {propTypes as PropTypes} from "mobx-react";
 
-class BlogPost extends Component {
+class BlogPostDisplay extends Component {
+    // noinspection JSUnusedGlobalSymbols
+    static propTypes = {
+        blogPost: PropTypes.objectOrObservableObject.isRequired,
+    };
+
     componentDidMount() {
         this.blogPostBody.innerHTML = this.props.blogPost.body
     }
@@ -37,12 +43,10 @@ class BlogPost extends Component {
                     <i className="material-icons">access_time</i>
                     <span className={"BlogPost-LabelText"}>{prettyCreatedAtString}</span>
                 </p>
-                <div className={'BlogPost-Body'} ref={div => this.blogPostBody = div}>
-
-                </div>
+                <div className={'BlogPost-Body'} ref={div => this.blogPostBody = div}> </div>
             </div>
         )
     }
 }
 
-export default BlogPost
+export default BlogPostDisplay

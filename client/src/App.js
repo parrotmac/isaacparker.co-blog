@@ -13,9 +13,10 @@ import Main from "./components/Main";
 import Footer from "./components/Footer";
 import PortfolioExpose from "./components/PortfolioExpose";
 import AuthLanding from "./components/Auth/AuthLanding";
-import BlogPostPage from "./components/BlogPostPage";
 import AuthInitializer from "./components/AuthInitializer";
 import PageNotFound from "./components/PageNotFound";
+import BlogPostDetail from "./containers/Admin/BlogPostDetail";
+import BlogPostCreator from "./containers/Admin/BlogPostCreator";
 
 class RedirectToBlog extends Component {
     render() {
@@ -40,11 +41,9 @@ class App extends Component {
                                 <Switch>
                                     <Route exact path="/" component={RedirectToBlog}/>
 
-                                    {/*<Switch>*/}
                                     <Route exact path="/blog" component={Blog}/>
-                                    <Route exact path="/blog/new" component={BlogPostPage}/>
-                                    <Route path="/blog/:blogPostId" component={BlogPostPage} />
-                                    {/*</Switch>*/}
+                                    <Route exact path="/blog/new" component={BlogPostCreator}/>
+                                    <Route path="/blog/:blogPostId" component={BlogPostDetail} />
 
                                     <Route path="/portfolio" component={Portfolio}/>
 

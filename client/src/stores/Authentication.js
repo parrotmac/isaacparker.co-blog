@@ -46,6 +46,13 @@ class Authentication {
         return this.getAuthStatus.get();
     }
 
+    @computed
+    get isAdminUser() {
+        // TODO: Check JWT claims
+        // FIXME
+        return this.getAuthStatus.get();
+    }
+
     @action
     requestJsonWebToken(email, password) {
         this.blogPosts = [];

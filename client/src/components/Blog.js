@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import BlogPost from "./BlogPost";
+import BlogPostDisplay from "./BlogPostDisplay";
 import {inject, observer} from "mobx-react";
 import HorizontalRule from "./HorizontalRule";
-import AdminOnly from "./Admin/AdminOnly";
+import AdminOnly from "../containers/Admin/AdminOnly";
 import Toolbar from "./Admin/Toolbar";
 import {Link} from "react-router-dom";
 
@@ -27,7 +27,7 @@ class Blog extends Component {
 
         const posts = blogPosts.map((post, index) =>
             <div>
-                <BlogPost key={index} blogPost={post} titleLink={`/blog/${post.ID}`} />
+                <BlogPostDisplay key={index} blogPost={post} titleLink={`/blog/${post.ID}`} />
 
                 {index !== blogPosts.length - 1 &&
                 <HorizontalRule key={`hr-${index}`} width={'80%'} hMargin={'auto'} vMargin={50}/>

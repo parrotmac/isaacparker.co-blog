@@ -1,0 +1,6 @@
+@import "../../styles/constants.scss";
+
+// This is how Summernote knows what font to use in the editor
+.note-editable.panel-body {
+  font-family: $ip-article-body-font-family;
+}

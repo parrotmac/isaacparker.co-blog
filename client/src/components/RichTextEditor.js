@@ -37,6 +37,13 @@ class RichTextEditor extends Component {
                     lang: 'en-US',
                     height: 450,
                     dialogsInBody: true,
+                    fontNames: [
+                        'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
+                        'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande',
+                        'open-sans', 'Tahoma', 'Times New Roman', 'Verdana'
+                    ],
+                    defaultFontName: 'open-sans',
+                    fontNamesIgnoreCheck: ['open-sans'],
                     toolbar: [
                         ['style', ['style']],
                         ['font', ['bold', 'underline', 'clear']],
