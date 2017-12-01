@@ -6,7 +6,9 @@ import 'react-summernote/dist/react-summernote.css';
 import 'bootstrap/js/modal';
 import 'bootstrap/js/dropdown';
 import 'bootstrap/js/tooltip';
-import 'bootstrap/dist/css/bootstrap.css';
+
+// Shouldn't be needed as bootstrap is included globally
+// import 'bootstrap/dist/css/bootstrap.css';
 
 class RichTextEditor extends Component {
     constructor(props) {

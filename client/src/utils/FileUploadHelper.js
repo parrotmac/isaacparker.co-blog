@@ -57,11 +57,17 @@ class FileUploadHelper {
             constructedRequest
         ).then(
             res => {
-                if(res.status === 204) {
-                    // A 204 Doesn't have a response body
-                    return true
+                if(res.ok) {
+                    if (res.status === 204) {
+                        // A 204 Doesn't have a response body
+                        return true
+                    }
+                    return res.json()
+                } else {
+                    return Promise.reject({
+                        msg: "Response wasn't ok"
+                    })
                 }
-                return res.json()
             }
         )
     }
