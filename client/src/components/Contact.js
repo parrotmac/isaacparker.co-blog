@@ -19,7 +19,7 @@ class Contact extends Component {
                         <HorizontalRule width={50} hMargin={0} />
                         <div className={'Contact-AboutMe'}>
                             <h4>About Me</h4>
-                            <p>I'm a technology-obsessed human.</p>
+                            <p>I'm one of those darn millennials that's into cars, code and coffee.</p>
                         </div>
                     </div>
                 </div>

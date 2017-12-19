@@ -7,9 +7,6 @@ import 'bootstrap/js/modal';
 import 'bootstrap/js/dropdown';
 import 'bootstrap/js/tooltip';
 
-// Shouldn't be needed as bootstrap is included globally
-// import 'bootstrap/dist/css/bootstrap.css';
-
 class RichTextEditor extends Component {
     constructor(props) {
         super(props);
