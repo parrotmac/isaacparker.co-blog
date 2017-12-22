@@ -14,7 +14,7 @@ jobs:
       - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
       - docker build -t ipco .
       - docker images
-      - '[[ $TRAVIS_BRANCH = master ]] && $DOCKER_TAG="latest" || $DOCKER_TAG="$TRAVIS_BRANCH"'
+      - "if [ \"$TRAVIS_BRANCH\" = master ]; then DOCKER_TAG=latest; else DOCKER_TAG=\"$TRAVIS_BRANCH\"; fi"
       - echo "Tagging Docker Image with $DOCKER_TAG"
-      - docker tag ipco $DOCKER_USERNAME/ipco:$DOCKER_TAG
-      - docker push $DOCKER_USERNAME/ipco:$DOCKER_TAG
+      - docker tag ipco $DOCKER_USERNAME/ipco:${DOCKER_TAG}
+      - docker push $DOCKER_USERNAME/ipco:${DOCKER_TAG}
